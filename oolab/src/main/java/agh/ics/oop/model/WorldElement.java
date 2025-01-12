@@ -4,6 +4,8 @@ public interface WorldElement {
 
     Vector2d getPosition();
 
+    String getStateOfImage();
+
     @Override
     String toString();
 

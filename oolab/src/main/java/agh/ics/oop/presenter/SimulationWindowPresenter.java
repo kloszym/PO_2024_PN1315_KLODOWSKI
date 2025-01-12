@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 public class SimulationWindowPresenter implements MapChangeListener {
@@ -28,12 +29,18 @@ public class SimulationWindowPresenter implements MapChangeListener {
     private VBox bottomElements;
 
 
-    public void setWorldMap(WorldMap worldMap, String moveInput) {
+    public void setWorldMap(AbstractWorldMap worldMap, String moveInput) {
         this.worldMap = worldMap;
         mainBorderPane.setMargin(bottomElements, new Insets(12,12,12,12));
         mainBorderPane.setMargin(mapGrid, new Insets(12,12,12,12));
         List<Vector2d> positions = List.of(new Vector2d(1,2),new Vector2d(3,4));
         List<MoveDirections> directions = OptionsParser.translateDirections(moveInput.split(" "));
+
+        worldMap.addObservator((map, message) -> System.out.println("%s %s".formatted(new java.util.Date().toGMTString(),message)));
+
+        FileMapDisplay fileMapDisplay = new FileMapDisplay();
+        worldMap.addObservator(fileMapDisplay);
+
         Simulation simulation = new Simulation(positions, directions, worldMap);
         List<Simulation> simulationsList = List.of(simulation);
         SimulationEngine simulationEngine = new SimulationEngine(simulationsList);
@@ -76,10 +83,9 @@ public class SimulationWindowPresenter implements MapChangeListener {
         List<WorldElement> elements = map.getElements();
         for (WorldElement element : elements ){
             Vector2d positionOfElement = element.getPosition();
-            Label animal = new Label();
-            animal.setText(element.toString());
-            mapGrid.add(animal, positionOfElement.getX() + relativeShiftOfX, relativeShiftOfY - positionOfElement.getY());
-            GridPane.setHalignment(animal, HPos.CENTER);
+            VBox worldElement = new WorldElementBox(element).getvBox();
+            mapGrid.add(worldElement, positionOfElement.getX() + relativeShiftOfX, relativeShiftOfY - positionOfElement.getY());
+            GridPane.setHalignment(worldElement, HPos.CENTER);
         }
     }
 

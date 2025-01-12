@@ -16,4 +16,8 @@ public class Grass implements WorldElement {
         return "*";
     }
 
+    @Override
+    public String getStateOfImage() {
+        return "grass.png";
+    }
 }

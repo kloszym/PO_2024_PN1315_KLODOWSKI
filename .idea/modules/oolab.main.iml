@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="oolab:main" external.linked.project.path="$MODULE_DIR$/../../oolab" external.root.project.path="$MODULE_DIR$/../../oolab" external.system.id="GRADLE" external.system.module.group="org.example" external.system.module.type="sourceSet" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_21">
+    <output url="file://$MODULE_DIR$/../../oolab/build/classes/java/main" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../oolab/src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../oolab/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../oolab/src/main/resources" type="java-resource" />
+    </content>
+    <orderEntry type="jdk" jdkName="graalvm-jdk-21" jdkType="JavaSDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-fxml:win:17" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-web:win:17" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:17" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:win:17" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-media:17" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-media:win:17" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-swing:win:17" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:17" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:win:17" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:17" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:win:17" level="project" />
+  </component>
+</module>

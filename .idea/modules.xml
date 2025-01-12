@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/PO_2024_PN1315_KLODOWSKI.iml" filepath="$PROJECT_DIR$/.idea/PO_2024_PN1315_KLODOWSKI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/oolab.iml" filepath="$PROJECT_DIR$/.idea/modules/oolab.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/oolab.main.iml" filepath="$PROJECT_DIR$/.idea/modules/oolab.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/oolab.test.iml" filepath="$PROJECT_DIR$/.idea/modules/oolab.test.iml" />
     </modules>
   </component>
 </project>

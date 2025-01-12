@@ -5,6 +5,7 @@ import agh.ics.oop.model.Vector2d;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -46,7 +47,7 @@ public interface WorldMap extends MoveValidator {
      * @param position The position of the animal.
      * @return animal or null if the position is not occupied.
      */
-    WorldElement objectAt(Vector2d position);
+    Optional<WorldElement> objectAt(Vector2d position);
 
     /**
      * @return current boundaries of map
@@ -69,4 +70,11 @@ public interface WorldMap extends MoveValidator {
      */
 
     UUID getID();
+
+    /**
+     *
+     * @return ordered collection of animals
+     */
+
+    List<Animal> getOrderedAnimals();
 }

@@ -3,6 +3,7 @@ package agh.ics.oop.model;
 import agh.ics.oop.model.util.MapVisualizer;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class AbstractWorldMap implements WorldMap {
 
@@ -17,16 +18,18 @@ public abstract class AbstractWorldMap implements WorldMap {
             throw new IncorrectPositionException(position);
         }else {
             animals.put(animal.getPosition(), animal);
-            mapChanged("Zwierzę zotało położone");
+            mapChanged("Zwierzę zotało położone na %s".formatted(animal.getPosition()));
         }
     }
 
     public void move(Animal animal, MoveDirections direction) {
-        if (objectAt(animal.getPosition()).equals(animal)) {
+        if (objectAt(animal.getPosition()).get().equals(animal)) {
+            Vector2d oldPosition = animal.getPosition();
             animals.remove(animal.getPosition());
             animal.move(direction, this);
+            Vector2d newPosition = animal.getPosition();
             animals.put(animal.getPosition(), animal);
-            mapChanged("Zwierze poruszyło sie");
+            mapChanged("Zwierze poruszyło sie z %s na %s.".formatted(oldPosition, newPosition));
         }
     }
 
@@ -38,11 +41,8 @@ public abstract class AbstractWorldMap implements WorldMap {
         return !animals.containsKey(position);
     }
 
-    public WorldElement objectAt(Vector2d position) {
-        if (animals.containsKey(position)) {
-            return animals.get(position);
-        }
-        return null;
+    public Optional<WorldElement> objectAt(Vector2d position) {
+        return Optional.ofNullable(animals.get(position));
     }
 
     public List<WorldElement> getElements() {
@@ -72,5 +72,13 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public UUID getID(){
         return id;
+    }
+
+    public List<Animal> getOrderedAnimals() {
+        return animals.keySet().stream()
+                                .sorted(Comparator.comparing(Vector2d::getX)
+                                    .thenComparing(Vector2d::getY))
+                                .map(vector -> animals.get(vector))
+                                .toList();
     }
 }

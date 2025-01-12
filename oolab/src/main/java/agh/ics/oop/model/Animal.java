@@ -49,4 +49,14 @@ public class Animal implements WorldElement{
     public Vector2d getPosition() {
         return position;
     }
+
+    @Override
+    public String getStateOfImage() {
+        return switch (direction){
+            case NORTH -> "up.png";
+            case SOUTH -> "down.png";
+            case EAST -> "right.png";
+            case WEST -> "left.png";
+        };
+    }
 }
