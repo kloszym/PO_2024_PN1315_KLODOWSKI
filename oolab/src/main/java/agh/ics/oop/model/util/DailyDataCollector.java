@@ -4,8 +4,6 @@ import agh.ics.oop.model.*;
 
 import java.util.*;
 
-import static java.lang.Math.min;
-
 public class DailyDataCollector
 {
     private final ProjectWorldMap map;
@@ -53,7 +51,7 @@ public class DailyDataCollector
         Set<List<Integer>> resultSet = new HashSet<>();
 
 
-        int currentMaxGenomeCount = 0;
+        int currentMaxGenomeCount;
         for (Animal animal : map.getAnimalsList())
         {
             currentMaxGenomeCount = 1;
@@ -86,7 +84,7 @@ public class DailyDataCollector
     public int averageEnergyLevel()
     {
         if (numberOfAliveAnimals()>0){
-            return (int)(map.getAnimalsList().stream().map(Animal::getEnergy).reduce(0, Integer::sum) / numberOfAliveAnimals());
+            return map.getAnimalsList().stream().map(Animal::getEnergy).reduce(0, Integer::sum) / numberOfAliveAnimals();
         }
         else{
             return 0;
@@ -96,8 +94,8 @@ public class DailyDataCollector
     // średnia długość życia dla martwych zwierzaków
     public synchronized Optional<Integer> averageLifeSpan()
     {
-        if (deadAnimals.size() > 0) {
-            return Optional.of((int) (deadAnimals.stream().map(Animal::getDaysAlive).reduce(0, Integer::sum) / deadAnimals.size()));
+        if (!deadAnimals.isEmpty()) {
+            return Optional.of(deadAnimals.stream().map(Animal::getDaysAlive).reduce(0, Integer::sum) / deadAnimals.size());
         }
         else
         {
@@ -109,7 +107,7 @@ public class DailyDataCollector
     public int averageKidsNumber()
     {
         if (numberOfAliveAnimals()>0){
-            return (int)(totalNumberOfKids() / numberOfAliveAnimals());
+            return totalNumberOfKids() / numberOfAliveAnimals();
         }
         else{
             return 0;

@@ -1,11 +1,9 @@
 package agh.ics.oop.model;
 
-import javafx.scene.image.Image;
-
 public class Plant implements WorldElement {
 
-    private int energy;
-    private Vector2d position;
+    private final int energy;
+    private final Vector2d position;
 
 
     public Plant(int energy, Vector2d position) {

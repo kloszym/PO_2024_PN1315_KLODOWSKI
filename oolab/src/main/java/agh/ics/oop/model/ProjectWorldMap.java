@@ -13,7 +13,6 @@ public interface ProjectWorldMap extends MoveValidator{
      *
      * @param animal The animal to place on the map.
      *               It throws exception instead of returning
-     * @return True if the animal was placed. The animal cannot be placed if the move is not valid.
      */
     void place(Animal animal) throws IncorrectPositionException;
 
@@ -22,24 +21,6 @@ public interface ProjectWorldMap extends MoveValidator{
      * If the move is not possible, this method has no effect.
      */
     void move(Animal animal);
-
-    /**
-     * Return true if given position on the map is occupied. Should not be
-     * confused with canMove since there might be empty positions where the animal
-     * cannot move.
-     *
-     * @param position Position to check.
-     * @return True if the position is occupied.
-     */
-    boolean isOccupied(Vector2d position);
-
-    /**
-     * Return an animal at a given position.
-     *
-     * @param position The position of the animal.
-     * @return animal or null if the position is not occupied.
-     */
-    List<WorldElement> objectsAt(Vector2d position);
 
 
     /**
@@ -60,7 +41,7 @@ public interface ProjectWorldMap extends MoveValidator{
 
     /**
      * Kill an animal - it means move it to delete it from animal map
-     * @param animal
+     * @param animal to kill
      */
 
     void killAnimal(Animal animal);
@@ -106,13 +87,8 @@ public interface ProjectWorldMap extends MoveValidator{
 
     /**
      * Add AnimalBornListener to list of animalBornListeners
-     * @param listener
+     * @param listener that listen animal birth
      */
     void addAnimalBornListener(AnimalBornListener listener);
 
-    /**
-     * Remove AnimalBornListener from list of animalBornListeners
-     * @param listener
-     */
-    void removeAnimalBornListener(AnimalBornListener listener);
 }

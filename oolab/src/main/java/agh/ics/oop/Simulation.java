@@ -13,7 +13,7 @@ import java.util.List;
 public class Simulation implements Runnable, AnimalBornListener {
 
 
-    private List<Animal> aliveAnimals = new ArrayList<>();
+    private final List<Animal> aliveAnimals = new ArrayList<>();
     private final List<Animal> deadAnimals = new ArrayList<>();
     List<Animal> animalsToRemove = new ArrayList<>();
     private int simulationDays = 0; // jak dlugo trwa symulacja
@@ -21,8 +21,6 @@ public class Simulation implements Runnable, AnimalBornListener {
     boolean shouldWriteIntoCSVFile = false;
     private volatile boolean paused = false;
     private final Object pauseLock = new Object();
-
-    // jak najpopularniejszy genotyp wydobyc
 
 
     public Simulation(ProjectWorldMap worldMap, int howManyAnimalsToStartWith, int howManyEnergyAnimalsStartWith,
@@ -61,7 +59,7 @@ public class Simulation implements Runnable, AnimalBornListener {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Interrupted after killing animals.");
             }
             for (Animal animal : new ArrayList<>(aliveAnimals)) {
                 checkPause();
@@ -69,7 +67,7 @@ public class Simulation implements Runnable, AnimalBornListener {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.err.println("Interrupted while animals moving.");
                 }
             }
             checkPause();
@@ -77,14 +75,14 @@ public class Simulation implements Runnable, AnimalBornListener {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Interrupted after aniamls eated plants.");
             }
             checkPause();
             worldMap.animalsReproducing();
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Interrupted after animals reproducing.");
             }
 
             checkPause();
@@ -92,7 +90,7 @@ public class Simulation implements Runnable, AnimalBornListener {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Interrupted after plants growing.");
             }
             for (Animal animal : new ArrayList<>(aliveAnimals)) {
                 checkPause();

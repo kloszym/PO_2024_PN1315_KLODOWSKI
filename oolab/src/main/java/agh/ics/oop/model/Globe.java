@@ -24,23 +24,18 @@ public class Globe implements ProjectWorldMap{
     private final RandomPositionForPlantsGenerator positionForPlantsGenerator;
     private final Random random = new Random();
     private static final Comparator<Animal> ANIMAL_COMPARATOR = new AnimalComparator();
-    private Map<Vector2d, HashSet<Animal>> animals = new ConcurrentHashMap<>();
-    private Map<Vector2d, Integer> recentDeadAnimals = new HashMap<>();
-    private List<MapChangeListener> observators = new ArrayList<>();
-    private List<AnimalBornListener> animalBornListeners = new ArrayList<>();
-    private UUID id = UUID.randomUUID();
-    private final boolean ifAnimalsMoveSlowerWhenOlder;
+    private final Map<Vector2d, HashSet<Animal>> animals = new ConcurrentHashMap<>();
+    private final List<MapChangeListener> observators = new ArrayList<>();
+    private final List<AnimalBornListener> animalBornListeners = new ArrayList<>();
+    private final UUID id = UUID.randomUUID();
 
-
-
-    public Globe(int height, int width, int howManyPlantsOnStart, int howManyEnergyFromPlants, int howManyPlantsEveryDay, boolean ifAnimalsMoveSlowerWhenOlder, boolean ifPlantsPreferDeadAnimals) {
+    public Globe(int height, int width, int howManyPlantsOnStart, int howManyEnergyFromPlants, int howManyPlantsEveryDay, boolean ifPlantsPreferDeadAnimals) {
         this.upperRightMapCorner = new Vector2d(width-1, height-1);
         this.lowerLeftEquatorCorner = new Vector2d(0, ((height/5)*2)+1);
         this.upperRightEquatorCorner = new Vector2d(width-1, ((height/5)*2)+((height+2)/5));
         this.everydayPlantsGrow = howManyPlantsEveryDay;
         this.howManyEnergyFromPlants=howManyPlantsOnStart;
         this.positionForPlantsGenerator = new RandomPositionForPlantsGenerator(height,width, upperRightEquatorCorner, lowerLeftEquatorCorner, ifPlantsPreferDeadAnimals);
-        this.ifAnimalsMoveSlowerWhenOlder = ifAnimalsMoveSlowerWhenOlder;
         this.ifPlantsPreferDeadAnimals = ifPlantsPreferDeadAnimals;
 
 
@@ -65,7 +60,7 @@ public class Globe implements ProjectWorldMap{
         {
             animals.computeIfAbsent(position, k -> new HashSet<>())
                     .add(animal);
-            mapChanged("Zwierze zostało położone na " + position.toString());
+            mapChanged("Zwierze zostało położone na %s".formatted(position));
         }
     }
 
@@ -98,19 +93,6 @@ public class Globe implements ProjectWorldMap{
     }
 
 
-    @Override
-    public synchronized boolean isOccupied(Vector2d position) {
-        return animals.containsKey(position);
-    }
-
-    @Override
-    public synchronized List<WorldElement> objectsAt(Vector2d position) {
-        List<WorldElement> objects = List.of();
-        if (isOccupied(position)) {
-            objects = animals.get(position).stream().collect(Collectors.toList());
-        }
-        return objects;
-    }
 
     @Override
     public synchronized List<WorldElement> getElements() {
@@ -133,7 +115,9 @@ public class Globe implements ProjectWorldMap{
         Vector2d position = animal.getPosition();
         HashSet<Animal> onThisSpace = animals.get(position);
         animals.get(position).remove(animal);
-        positionForPlantsGenerator.addPositionOfDeadAnimal(position);
+        if(ifPlantsPreferDeadAnimals){
+            positionForPlantsGenerator.addPositionOfDeadAnimal(position);
+        }
         if (onThisSpace.isEmpty()){
             animals.remove(position);
         }
@@ -224,7 +208,7 @@ public class Globe implements ProjectWorldMap{
                 }
             }
             catch (IncorrectPositionException e) {
-                e.printStackTrace();
+                System.err.println(e.getMessage());
             }
         }
 
@@ -242,7 +226,7 @@ public class Globe implements ProjectWorldMap{
             Animal winningAnimal;
             if( winningAnimals.size() == 1)
             {
-                winningAnimal=winningAnimals.get(0);
+                winningAnimal=winningAnimals.getFirst();
             }
             else {
                 int howManyWinningAnimals = winningAnimals.size();
@@ -277,17 +261,11 @@ public class Globe implements ProjectWorldMap{
         observators.add(observator);
     }
 
-    public void removeObservator(MapChangeListener observator){
-        observators.remove(observator);
-    }
 
     public void addAnimalBornListener(AnimalBornListener listener){
         animalBornListeners.add(listener);
     }
 
-    public void removeAnimalBornListener(AnimalBornListener listener){
-        animalBornListeners.remove(listener);
-    }
 
     @Override
     public boolean isPositionMoreDesirableForPlants(Vector2d position)

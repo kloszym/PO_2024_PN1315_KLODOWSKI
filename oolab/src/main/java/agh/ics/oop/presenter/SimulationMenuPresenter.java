@@ -1,36 +1,25 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.OptionsParser;
-import agh.ics.oop.Simulation;
-import agh.ics.oop.SimulationEngine;
 import agh.ics.oop.model.*;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
 public class SimulationMenuPresenter{
 
-    @FXML
-    private BorderPane mainBorderPane;
     @FXML
     private TextField heightInput;
     @FXML
@@ -95,7 +84,7 @@ public class SimulationMenuPresenter{
             BorderPane viewRoot = simulationLoader.load();
             SimulationWindowPresenter simulationPresenter = simulationLoader.getController();
             configureStage(simulationStage, viewRoot);
-            Globe map = new Globe(parseInt(heightInput.getText()), parseInt(widthInput.getText()), parseInt(howManyPlantsInput.getText()), parseInt(howManyEnergyFromPlantInput.getText()), parseInt(howManyPlantsGrowEverydayInput.getText()),ifAnimalsMoveSlowerWhenOlderCheckbox.isSelected(), plantsPreferDeadBodiesCheckbox.isSelected());
+            Globe map = new Globe(parseInt(heightInput.getText()), parseInt(widthInput.getText()), parseInt(howManyPlantsInput.getText()), parseInt(howManyEnergyFromPlantInput.getText()), parseInt(howManyPlantsGrowEverydayInput.getText()), plantsPreferDeadBodiesCheckbox.isSelected());
             map.addObservator(simulationPresenter);
             FileMapDisplay fileMapDisplay = new FileMapDisplay();
             map.addObservator(fileMapDisplay);
@@ -244,7 +233,6 @@ public class SimulationMenuPresenter{
     @FXML
     private void onSaveConfigurationClicked(){
         File file = new File("oolab/src/main/resources/configurations/%s.txt".formatted(nameOfConfiguration.getText()));
-        System.out.println("Attempting to create file: " + file.getAbsolutePath());
         try (FileWriter fileWriter = new FileWriter(file, false)) {
             fileWriter.write("%s\n".formatted(heightInput.getText()));
             fileWriter.write("%s\n".formatted(widthInput.getText()));
@@ -264,7 +252,7 @@ public class SimulationMenuPresenter{
             fileWriter.write("%s\n".formatted(nameOfConfiguration.getText()));
         }
         catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error accessing directory: " + e.getMessage());
         }
         configurationChoise.getItems().add(nameOfConfiguration.getText());
         configurationChoise.setValue(nameOfConfiguration.getText());
