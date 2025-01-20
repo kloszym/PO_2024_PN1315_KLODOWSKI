@@ -60,7 +60,7 @@ public class SimulationMenuPresenter{
 
     public void loadConfigurations() {
         System.out.println(System.getProperty("user.dir"));
-        Path dirPath = Paths.get("oolab/src/main/resources/configurations");
+        Path dirPath = Paths.get("src/main/resources/configurations");
 
         try {
             Files.walk(dirPath, 1)
@@ -206,7 +206,7 @@ public class SimulationMenuPresenter{
     }
 
     private void loadConfiguration(String fileName){
-        Path filePath = Paths.get("oolab/src/main/resources/configurations/"+fileName);
+        Path filePath = Paths.get("src/main/resources/configurations/"+fileName);
         try {
             List<String> configuration = Files.readAllLines(filePath);
             heightInput.setText(configuration.get(0));
@@ -232,7 +232,7 @@ public class SimulationMenuPresenter{
 
     @FXML
     private void onSaveConfigurationClicked(){
-        File file = new File("oolab/src/main/resources/configurations/%s.txt".formatted(nameOfConfiguration.getText()));
+        File file = new File("src/main/resources/configurations/%s.txt".formatted(nameOfConfiguration.getText()));
         try (FileWriter fileWriter = new FileWriter(file, false)) {
             fileWriter.write("%s\n".formatted(heightInput.getText()));
             fileWriter.write("%s\n".formatted(widthInput.getText()));
