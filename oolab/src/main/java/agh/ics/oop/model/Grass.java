@@ -1,6 +1,5 @@
 package agh.ics.oop.model;
 
-import javafx.scene.image.Image;
 
 public class Grass implements WorldElement {
 

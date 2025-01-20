@@ -1,9 +1,6 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.Simulation;
-
 import java.util.Objects;
-import java.util.Random;
 
 public class Genome
 {
@@ -133,9 +130,9 @@ public class Genome
 
     @Override
     public String toString(){
-       String string = "[";
+       StringBuilder string = new StringBuilder("[");
        for (int gen : getGenome()){
-           string += gen + ", ";
+           string.append(gen).append(", ");
        }
        return string + "]";
     }

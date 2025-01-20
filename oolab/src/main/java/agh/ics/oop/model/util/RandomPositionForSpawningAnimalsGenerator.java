@@ -8,7 +8,7 @@ public class RandomPositionForSpawningAnimalsGenerator {
 
     private final int maxWidthValue;
     private final int maxHeightValue;
-    private Random rand = new Random();
+    private final Random rand = new Random();
 
     public RandomPositionForSpawningAnimalsGenerator(int maxWidthValue, int maxHeightValue) {
         this.maxWidthValue = maxWidthValue;

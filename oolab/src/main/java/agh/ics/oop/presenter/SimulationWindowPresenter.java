@@ -30,10 +30,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.UUID;
-
-
-import static java.lang.Integer.parseInt;
-import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class SimulationWindowPresenter implements MapChangeListener, AnimalStateListener {
@@ -42,11 +38,11 @@ public class SimulationWindowPresenter implements MapChangeListener, AnimalState
     private Simulation simulation;
     private Stage stage;
 
-    private WorldElementVisualizer worldElementVisualizer = new WorldElementVisualizer();
+    private final WorldElementVisualizer worldElementVisualizer = new WorldElementVisualizer();
     private DailyDataCollector collectData;
 
-    private Image tile = new Image("tile.png");
-    private Image equator = new Image("equtor.png");
+    private final Image tile = new Image("tile.png");
+    private final Image equator = new Image("equtor.png");
 
     private SimulationEngine simulationEngine;
 
@@ -75,8 +71,6 @@ public class SimulationWindowPresenter implements MapChangeListener, AnimalState
     @FXML
     private Button stopFollowing = new Button();
 
-    @FXML
-    private BorderPane mainBorderPane;
     @FXML
     private GridPane mapGrid;
     @FXML
@@ -108,7 +102,7 @@ public class SimulationWindowPresenter implements MapChangeListener, AnimalState
                                 Stage simulationStage) {
         this.worldMap = worldMap;
         stage = simulationStage;
-        mainBorderPane.setMargin(mapGrid, new Insets(12,12,12,12));
+        BorderPane.setMargin(mapGrid, new Insets(12,12,12,12));
         this.simulation = new Simulation(worldMap, howManyAnimalsToStartWith, howManyEnergyAnimalsStartWith,
                 energyNeededToReproduce, energyGettingPassedToDescendant,minMutationInNewborn, maxMutationInNewborn,
                 genomeLength, ifAnimalsMoveSlowerWhenOlder, writeIntoACSVFile);
