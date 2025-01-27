@@ -13,7 +13,7 @@ import java.util.UUID;
  *
  * @author apohllo, idzik
  */
-public interface WorldMap extends MoveValidator {
+public interface WorldMap extends MoveValidator { // czy to jest używane?
 
     /**
      * Place a animal on the map.
@@ -49,19 +49,14 @@ public interface WorldMap extends MoveValidator {
     WorldElement objectAt(Vector2d position);
 
 
-
     /**
-     *
      * @return List of <WorldElement>
-     *
      */
 
     List<WorldElement> getElements();
 
     /**
-     *
      * @return id of map
-     *
      */
 
     UUID getID();

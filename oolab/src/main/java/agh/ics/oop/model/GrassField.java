@@ -10,9 +10,9 @@ public class GrassField extends AbstractWorldMap {
     private Vector2d lowerLeftGrassesCorner = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
     public GrassField(int howManyGrasses) {
-        int length = (int)Math.ceil(Math.sqrt(howManyGrasses * 10));
+        int length = (int) Math.ceil(Math.sqrt(howManyGrasses * 10));
         RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(length, length, howManyGrasses);
-        for(Vector2d grassPosition : randomPositionGenerator) {
+        for (Vector2d grassPosition : randomPositionGenerator) {
             upperRightGrassesCorner = grassPosition.upperRight(upperRightGrassesCorner);
             lowerLeftGrassesCorner = grassPosition.lowerLeft(lowerLeftGrassesCorner);
             grasses.put(grassPosition, new Grass(grassPosition));
@@ -27,7 +27,7 @@ public class GrassField extends AbstractWorldMap {
     @Override
     public WorldElement objectAt(Vector2d position) {
         if (Objects.equals(null, super.objectAt(position))) {
-            if (grasses.containsKey(position)){
+            if (grasses.containsKey(position)) {
                 return grasses.get(position);
             }
         }
@@ -35,19 +35,17 @@ public class GrassField extends AbstractWorldMap {
     }
 
 
-
-
-    public List<WorldElement> getElements(){
+    public List<WorldElement> getElements() {
         List<WorldElement> elements = super.getElements();
         elements.addAll((grasses.values()));
         return elements;
     }
 
     @Override
-    public Boundary getCurrentBounds(){
+    public Boundary getCurrentBounds() {
         Vector2d upperRightMapCorner = upperRightGrassesCorner;
         Vector2d lowerLeftMapCorner = lowerLeftGrassesCorner;
-        for (Vector2d position : animals.keySet()){
+        for (Vector2d position : animals.keySet()) {
             upperRightMapCorner = position.upperRight(upperRightMapCorner);
             lowerLeftMapCorner = position.lowerLeft(lowerLeftMapCorner);
         }

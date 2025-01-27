@@ -2,19 +2,19 @@ package agh.ics.oop.model;
 
 import java.util.*;
 
-public class RandomPositionGenerator implements Iterable<Vector2d>{
+public class RandomPositionGenerator implements Iterable<Vector2d> {
 
     private int howMany;
     private int generationRange;
     private final List<Vector2d> positions = new ArrayList<>();
-    private final Random rand = new Random();
+    private final Random rand = new Random(); // static?
 
     RandomPositionGenerator(int maxWidth, int maxHeight, int howMany) {
         this.howMany = howMany;
-        generationRange = (maxWidth+1) * (maxHeight+1);
-        for (int i=0; i<=maxWidth; i++){
-            for (int j=0; j<=maxHeight; j++){
-                positions.add(new Vector2d(i,j));
+        generationRange = (maxWidth + 1) * (maxHeight + 1);
+        for (int i = 0; i <= maxWidth; i++) {
+            for (int j = 0; j <= maxHeight; j++) {
+                positions.add(new Vector2d(i, j));
             }
         }
     }

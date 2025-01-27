@@ -15,10 +15,10 @@ public class Simulation implements Runnable, AnimalBornListener {
 
     private final List<Animal> aliveAnimals = new ArrayList<>();
     private final List<Animal> deadAnimals = new ArrayList<>();
-    List<Animal> animalsToRemove = new ArrayList<>();
+    List<Animal> animalsToRemove = new ArrayList<>(); // modyfikator dostępu?
     private int simulationDays = 0; // jak dlugo trwa symulacja
     private final ProjectWorldMap worldMap;
-    boolean shouldWriteIntoCSVFile = false;
+    boolean shouldWriteIntoCSVFile = false; // modyfikator dostępu?
     private volatile boolean paused = false;
     private final Object pauseLock = new Object();
 
@@ -26,7 +26,7 @@ public class Simulation implements Runnable, AnimalBornListener {
     public Simulation(ProjectWorldMap worldMap, int howManyAnimalsToStartWith, int howManyEnergyAnimalsStartWith,
                       int energyNeededToReproduce, int energyGettingPassedToDescendant, int minMutationInNewborn,
                       int maxMutationInNewborn, int genomeLength, boolean ifAnimalsMoveSlowerWhenOlder,
-                      boolean writeIntoACSVFile){
+                      boolean writeIntoACSVFile) {
         this.worldMap = worldMap;
         worldMap.addAnimalBornListener(this);
         RandomPositionForSpawningAnimalsGenerator randomPositionForSpawningAnimalsGenerator = new RandomPositionForSpawningAnimalsGenerator(worldMap.getCurrentBounds().upperRightCorner().getX() + 1, worldMap.getCurrentBounds().upperRightCorner().getY() + 1);
@@ -37,7 +37,7 @@ public class Simulation implements Runnable, AnimalBornListener {
             try {
                 worldMap.place(animal);
                 aliveAnimals.add(animal);
-            } catch (IncorrectPositionException e) {
+            } catch (IncorrectPositionException e) { // czy to się może zdarzyć?
                 System.out.println(e.getMessage());
             }
         }
@@ -59,7 +59,7 @@ public class Simulation implements Runnable, AnimalBornListener {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                System.err.println("Interrupted after killing animals.");
+                System.err.println("Interrupted after killing animals."); // i tyle?
             }
             for (Animal animal : new ArrayList<>(aliveAnimals)) {
                 checkPause();
@@ -108,6 +108,7 @@ public class Simulation implements Runnable, AnimalBornListener {
             simulationDays++;
         }
     }
+
     public void pause() {
         paused = true;
     }
@@ -126,7 +127,7 @@ public class Simulation implements Runnable, AnimalBornListener {
                     try {
                         pauseLock.wait();
                     } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
+                        Thread.currentThread().interrupt(); // jaki jest sens wysyłać interrupt sobie samemu?
                         return;
                     }
                 }

@@ -18,45 +18,45 @@
 
     <left>
         <VBox fx:id="descriptionOfSimulation" spacing="5">
-        <HBox>
-            <Label>Current day: </Label>
-            <Text fx:id="numberOfDays"></Text>
-        </HBox>
-
-        <HBox>
-            <Label>Number of animals: </Label>
-            <Text fx:id="numberOfAnimals"></Text>
-        </HBox>
-
-        <HBox>
-            <Label>Number of plants: </Label>
-            <Text fx:id="numberOfPlants"></Text>
-        </HBox>
-
-        <HBox>
-             <Label>Number of free tiles: </Label>
-             <Text fx:id="numberOfFreeTiles"></Text>
-        </HBox>
-
-            <HBox alignment="BASELINE_LEFT" spacing="10">
-                <Label text="Most popular genotype: " />
-                <Text fx:id="mostPopularGenotype" />
+            <HBox>
+                <Label>Current day:</Label>
+                <Text fx:id="numberOfDays"></Text>
             </HBox>
 
-        <HBox>
-            <Label>Average energy level: </Label>
-            <Text fx:id="averageEnergyLevel"></Text>
-        </HBox>
+            <HBox>
+                <Label>Number of animals:</Label>
+                <Text fx:id="numberOfAnimals"></Text>
+            </HBox>
 
-        <HBox>
-            <Label>Average days alive: </Label>
-            <Text fx:id="averageDaysAlive"></Text>
-        </HBox>
+            <HBox>
+                <Label>Number of plants:</Label>
+                <Text fx:id="numberOfPlants"></Text>
+            </HBox>
 
-        <HBox>
-            <Label>Average number of kids: </Label>
-            <Text fx:id="averageNumberOfKids"></Text>
-        </HBox>
+            <HBox>
+                <Label>Number of free tiles:</Label>
+                <Text fx:id="numberOfFreeTiles"></Text>
+            </HBox>
+
+            <HBox alignment="BASELINE_LEFT" spacing="10">
+                <Label text="Most popular genotype: "/>
+                <Text fx:id="mostPopularGenotype"/>
+            </HBox>
+
+            <HBox>
+                <Label>Average energy level:</Label>
+                <Text fx:id="averageEnergyLevel"></Text>
+            </HBox>
+
+            <HBox>
+                <Label>Average days alive:</Label>
+                <Text fx:id="averageDaysAlive"></Text>
+            </HBox>
+
+            <HBox>
+                <Label>Average number of kids:</Label>
+                <Text fx:id="averageNumberOfKids"></Text>
+            </HBox>
         </VBox>
     </left>
 
@@ -65,7 +65,8 @@
     </center>
 
     <bottom>
-        <Button fx:id="pauseAndResumeButton" text="Pause Simulation" onAction="#onPauseAndResumeButtonClicked" BorderPane.alignment="TOP_CENTER" alignment="TOP_CENTER"></Button>
+        <Button fx:id="pauseAndResumeButton" text="Pause Simulation" onAction="#onPauseAndResumeButtonClicked"
+                BorderPane.alignment="TOP_CENTER" alignment="TOP_CENTER"></Button>
     </bottom>
 
 </BorderPane>

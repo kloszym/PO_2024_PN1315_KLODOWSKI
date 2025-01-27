@@ -16,7 +16,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         Vector2d position = animal.getPosition();
         if (!canMoveTo(position)) {
             throw new IncorrectPositionException(position);
-        }else {
+        } else {
             animals.put(animal.getPosition(), animal);
             //mapChanged("Zwierzę zotało położone");
         }
@@ -54,14 +54,14 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public final String toString() {
         Boundary boundaries = getCurrentBounds();
-        return visualizer.draw(boundaries.lowerLeftCorner(),boundaries.upperRightCorner());
+        return visualizer.draw(boundaries.lowerLeftCorner(), boundaries.upperRightCorner());
     }
 
-    public void addObservator(MapChangeListener observator){
+    public void addObservator(MapChangeListener observator) {
         observators.add(observator);
     }
 
-    public void removeObservator(MapChangeListener observator){
+    public void removeObservator(MapChangeListener observator) {
         observators.remove(observator);
     }
 
@@ -71,7 +71,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 //        }
 //    }
 
-    public UUID getID(){
+    public UUID getID() {
         return id;
     }
 }

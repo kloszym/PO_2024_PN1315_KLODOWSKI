@@ -18,7 +18,7 @@ import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
-public class SimulationMenuPresenter{
+public class SimulationMenuPresenter {
 
     @FXML
     private TextField heightInput;
@@ -66,7 +66,7 @@ public class SimulationMenuPresenter{
             Files.walk(dirPath, 1)
                     .filter(path -> !path.equals(dirPath))  // Skip the directory itself
                     .forEach(path -> {
-                        configurationChoise.getItems().add(path.getFileName().toString().replace(".txt",""));
+                        configurationChoise.getItems().add(path.getFileName().toString().replace(".txt", ""));
                     });
         } catch (IOException e) {
             System.err.println("Error accessing directory: " + e.getMessage());
@@ -76,7 +76,7 @@ public class SimulationMenuPresenter{
 
     @FXML
     private void onSimulationStartClicked() throws Exception {
-        if(allConditionsAreGood()){
+        if (allConditionsAreGood()) {
             Stage simulationStage = new Stage();
             simulationStage.show();
             FXMLLoader simulationLoader = new FXMLLoader();
@@ -111,102 +111,101 @@ public class SimulationMenuPresenter{
             alert.setHeaderText(alertMessage);
             alert.showAndWait();
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }
 
-    private String buildALertMessage(){
+    private String buildALertMessage() {
 
-        String tooBigValues="Too big values:\n";
-        String tooSmallValues="Too small values:\n";
+        String tooBigValues = "Too big values:\n";
+        String tooSmallValues = "Too small values:\n";
 
-        if (parseInt(heightInput.getText())>50){
-            tooBigValues+="- Height of Map\n";
-        } else if (parseInt(heightInput.getText())<3){
-            tooSmallValues+="- Height of Map\n";
-        }
-
-        if (parseInt(widthInput.getText())>50){
-            tooBigValues+="- Width of Map\n";
-        } else if (parseInt(widthInput.getText())<3){
-            tooSmallValues+="- Width of Map\n";
+        if (parseInt(heightInput.getText()) > 50) {
+            tooBigValues += "- Height of Map\n";
+        } else if (parseInt(heightInput.getText()) < 3) {
+            tooSmallValues += "- Height of Map\n";
         }
 
-        int surfaceOfMap = parseInt(heightInput.getText())*parseInt(heightInput.getText());
-
-        if (parseInt(howManyPlantsInput.getText())>surfaceOfMap){
-            tooBigValues+="- How many starting plants\n";
-        } else if (parseInt(howManyPlantsInput.getText())<0){
-            tooSmallValues+="- How many starting plants\n";
-        }
-        
-        if (parseInt(howManyEnergyFromPlantInput.getText())>1000){
-            tooBigValues+="- Energy from eating one plant\n";
-        } else if (parseInt(howManyEnergyFromPlantInput.getText())<0){
-            tooSmallValues+="- Energy from eating one plant\n";
-        }
-        
-        if (parseInt(howManyPlantsGrowEverydayInput.getText())>surfaceOfMap){
-            tooBigValues+="- How many plants can grow every day\n";
-        } else if (parseInt(howManyPlantsGrowEverydayInput.getText())<0){
-            tooSmallValues+="- How many plants can grow every day\n";
-        }
-        
-        if (parseInt(howManyAnimalsOnStartInput.getText())>surfaceOfMap){
-            tooBigValues+="- How many animals will be on start\n";
-        } else if (parseInt(howManyAnimalsOnStartInput.getText())<0){
-            tooSmallValues+="- How many animals will be on start\n";
-        }
-        
-        if (parseInt(howManyStartingEnergyAnimalHaveInput.getText())>parseInt(energeyNeededToReproduceInput.getText())*5){
-            tooBigValues+="- With how many energy animals will be starting\n";
-        } else if (parseInt(howManyStartingEnergyAnimalHaveInput.getText())<1){
-            tooSmallValues+="- With how many energy animals will be starting\n";
-        }
-        
-        if (parseInt(howLongGenomWillBeInput.getText())>50){
-            tooBigValues+="- How long genom of one animal will be\n";
-        } else if (parseInt(howLongGenomWillBeInput.getText())<1){
-            tooSmallValues+="- How long genom of one animal will be\n";
+        if (parseInt(widthInput.getText()) > 50) {
+            tooBigValues += "- Width of Map\n";
+        } else if (parseInt(widthInput.getText()) < 3) {
+            tooSmallValues += "- Width of Map\n";
         }
 
-        if (parseInt(energeyNeededToReproduceInput.getText())>100){
-            tooBigValues+="- Energy that animal will be full and ready to reproduce\n";
-        } else if (parseInt(energeyNeededToReproduceInput.getText())<1){
-            tooSmallValues+="- Energy that animal will be full and ready to reproduce\n";
+        int surfaceOfMap = parseInt(heightInput.getText()) * parseInt(heightInput.getText());
+
+        if (parseInt(howManyPlantsInput.getText()) > surfaceOfMap) {
+            tooBigValues += "- How many starting plants\n";
+        } else if (parseInt(howManyPlantsInput.getText()) < 0) {
+            tooSmallValues += "- How many starting plants\n";
         }
-        
-        if (parseInt(energyUsedToReproduceInput.getText())>parseInt(energeyNeededToReproduceInput.getText())){
-            tooBigValues+="- Energy that will be used to reproduce\n";
-        } else if (parseInt(energyUsedToReproduceInput.getText())<1){
-            tooSmallValues+="- Energy that will be used to reproduce\n";
+
+        if (parseInt(howManyEnergyFromPlantInput.getText()) > 1000) {
+            tooBigValues += "- Energy from eating one plant\n";
+        } else if (parseInt(howManyEnergyFromPlantInput.getText()) < 0) {
+            tooSmallValues += "- Energy from eating one plant\n";
         }
-        
-        if (parseInt(minNumberOfMutationInput.getText())>parseInt(maxNumberOfMutationInput.getText())){
-            tooBigValues+="- Minimum number of mutation in descendant\n";
-        } else if (parseInt(minNumberOfMutationInput.getText())<0){
-            tooSmallValues+="- Minimum number of mutation in descendant\n";
+
+        if (parseInt(howManyPlantsGrowEverydayInput.getText()) > surfaceOfMap) {
+            tooBigValues += "- How many plants can grow every day\n";
+        } else if (parseInt(howManyPlantsGrowEverydayInput.getText()) < 0) {
+            tooSmallValues += "- How many plants can grow every day\n";
         }
-        
-        if (parseInt(maxNumberOfMutationInput.getText())>parseInt(howLongGenomWillBeInput.getText())){
-            tooBigValues+="- Maximum number of mutation in descendant\n";
-        } else if (parseInt(maxNumberOfMutationInput.getText())<parseInt(minNumberOfMutationInput.getText())){
-            tooSmallValues+="- Maximum number of mutation in descendant\n";
+
+        if (parseInt(howManyAnimalsOnStartInput.getText()) > surfaceOfMap) {
+            tooBigValues += "- How many animals will be on start\n";
+        } else if (parseInt(howManyAnimalsOnStartInput.getText()) < 0) {
+            tooSmallValues += "- How many animals will be on start\n";
+        }
+
+        if (parseInt(howManyStartingEnergyAnimalHaveInput.getText()) > parseInt(energeyNeededToReproduceInput.getText()) * 5) {
+            tooBigValues += "- With how many energy animals will be starting\n";
+        } else if (parseInt(howManyStartingEnergyAnimalHaveInput.getText()) < 1) {
+            tooSmallValues += "- With how many energy animals will be starting\n";
+        }
+
+        if (parseInt(howLongGenomWillBeInput.getText()) > 50) {
+            tooBigValues += "- How long genom of one animal will be\n";
+        } else if (parseInt(howLongGenomWillBeInput.getText()) < 1) {
+            tooSmallValues += "- How long genom of one animal will be\n";
+        }
+
+        if (parseInt(energeyNeededToReproduceInput.getText()) > 100) {
+            tooBigValues += "- Energy that animal will be full and ready to reproduce\n";
+        } else if (parseInt(energeyNeededToReproduceInput.getText()) < 1) {
+            tooSmallValues += "- Energy that animal will be full and ready to reproduce\n";
+        }
+
+        if (parseInt(energyUsedToReproduceInput.getText()) > parseInt(energeyNeededToReproduceInput.getText())) {
+            tooBigValues += "- Energy that will be used to reproduce\n";
+        } else if (parseInt(energyUsedToReproduceInput.getText()) < 1) {
+            tooSmallValues += "- Energy that will be used to reproduce\n";
+        }
+
+        if (parseInt(minNumberOfMutationInput.getText()) > parseInt(maxNumberOfMutationInput.getText())) {
+            tooBigValues += "- Minimum number of mutation in descendant\n";
+        } else if (parseInt(minNumberOfMutationInput.getText()) < 0) {
+            tooSmallValues += "- Minimum number of mutation in descendant\n";
+        }
+
+        if (parseInt(maxNumberOfMutationInput.getText()) > parseInt(howLongGenomWillBeInput.getText())) {
+            tooBigValues += "- Maximum number of mutation in descendant\n";
+        } else if (parseInt(maxNumberOfMutationInput.getText()) < parseInt(minNumberOfMutationInput.getText())) {
+            tooSmallValues += "- Maximum number of mutation in descendant\n";
         }
 
 
         return "%s\n%s".formatted(tooBigValues, tooSmallValues);
     }
 
-    private void onConfigurationChoiseChange(){
-        String selectedItem = configurationChoise.getSelectionModel().getSelectedItem().toString()+".txt";
+    private void onConfigurationChoiseChange() {
+        String selectedItem = configurationChoise.getSelectionModel().getSelectedItem().toString() + ".txt";
         loadConfiguration(selectedItem);
     }
 
-    private void loadConfiguration(String fileName){
-        Path filePath = Paths.get("src/main/resources/configurations/"+fileName);
+    private void loadConfiguration(String fileName) {
+        Path filePath = Paths.get("src/main/resources/configurations/" + fileName);
         try {
             List<String> configuration = Files.readAllLines(filePath);
             heightInput.setText(configuration.get(0));
@@ -231,10 +230,10 @@ public class SimulationMenuPresenter{
     }
 
     @FXML
-    private void onSaveConfigurationClicked(){
+    private void onSaveConfigurationClicked() {
         File file = new File("src/main/resources/configurations/%s.txt".formatted(nameOfConfiguration.getText()));
         try (FileWriter fileWriter = new FileWriter(file, false)) {
-            fileWriter.write("%s\n".formatted(heightInput.getText()));
+            fileWriter.write("%s\n".formatted(heightInput.getText())); // nie było by ładniej zrobić tego jednym wywołaniem write i formatted?
             fileWriter.write("%s\n".formatted(widthInput.getText()));
             fileWriter.write("%s\n".formatted(howManyPlantsInput.getText()));
             fileWriter.write("%s\n".formatted(howManyEnergyFromPlantInput.getText()));
@@ -250,8 +249,7 @@ public class SimulationMenuPresenter{
             fileWriter.write("%s\n".formatted(maxNumberOfMutationInput.getText()));
             fileWriter.write("%b\n".formatted(shouldWriteToCSV.isSelected()));
             fileWriter.write("%s\n".formatted(nameOfConfiguration.getText()));
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println("Error accessing directory: " + e.getMessage());
         }
         configurationChoise.getItems().add(nameOfConfiguration.getText());

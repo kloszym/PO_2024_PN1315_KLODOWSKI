@@ -8,14 +8,14 @@ public class RandomPositionForSpawningAnimalsGenerator {
 
     private final int maxWidthValue;
     private final int maxHeightValue;
-    private final Random rand = new Random();
+    private static final Random rand = new Random();
 
     public RandomPositionForSpawningAnimalsGenerator(int maxWidthValue, int maxHeightValue) {
         this.maxWidthValue = maxWidthValue;
         this.maxHeightValue = maxHeightValue;
     }
 
-    public Vector2d getRandomPosition(){
+    public Vector2d getRandomPosition() {
         int x = rand.nextInt(maxWidthValue);
         int y = rand.nextInt(maxHeightValue);
         return new Vector2d(x, y);

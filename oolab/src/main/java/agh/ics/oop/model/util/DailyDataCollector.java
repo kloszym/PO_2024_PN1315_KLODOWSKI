@@ -4,56 +4,48 @@ import agh.ics.oop.model.*;
 
 import java.util.*;
 
-public class DailyDataCollector
-{
+public class DailyDataCollector {
     private final ProjectWorldMap map;
     private final List<Animal> deadAnimals;
     private final Boundary boundary;
     private final int currentSimulationDay;
 
 
-    public DailyDataCollector(ProjectWorldMap map,List<Animal> deadAnimals, int currentSimulationDay)
-    {
+    public DailyDataCollector(ProjectWorldMap map, List<Animal> deadAnimals, int currentSimulationDay) {
         this.map = map;
         this.deadAnimals = deadAnimals;
         this.boundary = map.getCurrentBounds();
         this.currentSimulationDay = currentSimulationDay;
     }
 
-    public int numberOfAliveAnimals()
-    {
+    public int numberOfAliveAnimals() {
         return map.getAnimalsList().size();
     }
 
-    public int getCurrentSimulationDay()
-    {
+    public int getCurrentSimulationDay() {
         return currentSimulationDay;
     }
 
-    public int numberOfPlants()
-    {
+    public int numberOfPlants() {
         return map.getPlantsList().size();
     }
 
     // number of free tiles
-    public int numberOfFreeTiles()
-    {
+    public int numberOfFreeTiles() {
         // + 1 dlatego że numeracja jest od 0
-        return (boundary.upperRightCorner().getX()+1)*(boundary.upperRightCorner().getY()+1) - map.occupiedPositions().size();
+        return (boundary.upperRightCorner().getX() + 1) * (boundary.upperRightCorner().getY() + 1) - map.occupiedPositions().size();
     }
 
     // najpopularniejszy genotyp ?
     // DOKONCZYC!!
-    public Set<List<Integer>> mostPopularGenotype()
-    {
+    public Set<List<Integer>> mostPopularGenotype() {
         int maxGenomeCount = 0;
         Map<Genome, Integer> hashMap = new HashMap<>();
         Set<List<Integer>> resultSet = new HashSet<>();
 
 
         int currentMaxGenomeCount;
-        for (Animal animal : map.getAnimalsList())
-        {
+        for (Animal animal : map.getAnimalsList()) {
             currentMaxGenomeCount = 1;
             if (!hashMap.containsKey(animal.getGenome())) {
                 hashMap.put(animal.getGenome(), 1);
@@ -66,10 +58,8 @@ public class DailyDataCollector
                 maxGenomeCount = currentMaxGenomeCount;
         }
 
-        for(Map.Entry<Genome, Integer> entry : hashMap.entrySet())
-        {
-            if (entry.getValue() == maxGenomeCount)
-            {
+        for (Map.Entry<Genome, Integer> entry : hashMap.entrySet()) {
+            if (entry.getValue() == maxGenomeCount) {
                 int[] genomeArray = entry.getKey().getGenome();
                 List<Integer> genomeList = Arrays.stream(genomeArray)
                         .boxed()
@@ -81,46 +71,37 @@ public class DailyDataCollector
         return resultSet;
     }
 
-    public int averageEnergyLevel()
-    {
-        if (numberOfAliveAnimals()>0){
+    public int averageEnergyLevel() {
+        if (numberOfAliveAnimals() > 0) {
             return map.getAnimalsList().stream().map(Animal::getEnergy).reduce(0, Integer::sum) / numberOfAliveAnimals();
-        }
-        else{
+        } else {
             return 0;
         }
     }
 
     // średnia długość życia dla martwych zwierzaków
-    public synchronized Optional<Integer> averageLifeSpan()
-    {
+    public synchronized Optional<Integer> averageLifeSpan() {
         if (!deadAnimals.isEmpty()) {
             return Optional.of(deadAnimals.stream().map(Animal::getDaysAlive).reduce(0, Integer::sum) / deadAnimals.size());
-        }
-        else
-        {
+        } else {
             return Optional.empty();
         }
     }
 
     // średnia ilość dzieci
-    public int averageKidsNumber()
-    {
-        if (numberOfAliveAnimals()>0){
+    public int averageKidsNumber() {
+        if (numberOfAliveAnimals() > 0) {
             return totalNumberOfKids() / numberOfAliveAnimals();
-        }
-        else{
+        } else {
             return 0;
         }
     }
 
-    private int totalNumberOfKids()
-    {
+    private int totalNumberOfKids() {
         return map.getAnimalsList().stream().map(Animal::getKidsNumber).reduce(0, Integer::sum);
     }
 
-    public UUID getCurrentMapID()
-    {
+    public UUID getCurrentMapID() {
         return map.getID();
     }
 

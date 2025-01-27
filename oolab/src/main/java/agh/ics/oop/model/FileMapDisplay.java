@@ -13,9 +13,8 @@ public class FileMapDisplay implements MapChangeListener {
     public void mapChanged(ProjectWorldMap worldMap, String message) {
         File file = new File("map_%s.log".formatted(worldMap.getID()));
         try (FileWriter fileWriter = new FileWriter(file, true)) {
-            fileWriter.write("%s %s\n".formatted(new Date().toString(),message));
-        }
-        catch (IOException e) {
+            fileWriter.write("%s %s\n".formatted(new Date().toString(), message));
+        } catch (IOException e) {
             System.err.println(e.getMessage());
         }
     }

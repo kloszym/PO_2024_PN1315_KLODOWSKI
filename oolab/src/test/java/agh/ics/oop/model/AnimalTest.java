@@ -7,16 +7,14 @@ import java.util.Map;
 import static agh.ics.oop.model.MapDirections.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AnimalTest
-{
-    Globe globe = new Globe(20,20, 10, 10, 10, false);
-    Globe globe2 = new Globe(2,2, 0, 0, 0, false);
+public class AnimalTest {
+    Globe globe = new Globe(20, 20, 10, 10, 10, false);
+    Globe globe2 = new Globe(2, 2, 0, 0, 0, false);
 
     // we generate randomly the starting index so I cannot check that
     @Test
-    public void testIfMoveGivesCorrectOutput()
-    {
-        Animal animal1 = new Animal(new Vector2d(10,10), 10, 3, 2, 2,0,0, false );
+    public void testIfMoveGivesCorrectOutput() {
+        Animal animal1 = new Animal(new Vector2d(10, 10), 10, 3, 2, 2, 0, 0, false);
 
         int moves[] = animal1.getGenomeAsIntList();
 
@@ -25,8 +23,7 @@ public class AnimalTest
 
         int initialIndex = animal1.getInitialStartingGenomeIndex();
         int actualIndex;
-        for (int i = 0; i < moves.length; i++)
-        {
+        for (int i = 0; i < moves.length; i++) {
             actualIndex = (i + initialIndex) % moves.length;
             animal1.move(globe);
 
@@ -36,7 +33,6 @@ public class AnimalTest
             assertEquals(previousPos, animal1.getPosition());
             assertEquals(previousDirection, animal1.getDirection());
         }
-
 
 
     }
@@ -92,8 +88,7 @@ public class AnimalTest
                         assertEquals(animal1.getPosition(), new Vector2d(0, 1));
                         assertEquals(animal1.getDirection(), SOUTH);
                     }
-                    case NORTH_EAST ->
-                    {
+                    case NORTH_EAST -> {
                         assertEquals(animal1.getPosition(), new Vector2d(1, 1));
                         assertEquals(animal1.getDirection(), SOUTH_WEST);
                     }
@@ -113,8 +108,7 @@ public class AnimalTest
                         assertEquals(animal1.getPosition(), new Vector2d(1, 0));
                         assertEquals(animal1.getDirection(), NORTH);
                     }
-                    case SOUTH_WEST ->
-                    {
+                    case SOUTH_WEST -> {
                         assertEquals(animal1.getPosition(), new Vector2d(0, 0));
                         assertEquals(animal1.getDirection(), NORTH_EAST);
                     }
@@ -133,8 +127,7 @@ public class AnimalTest
                         assertEquals(animal1.getPosition(), new Vector2d(0, 1));
                         assertEquals(animal1.getDirection(), EAST);
                     }
-                    case NORTH_WEST ->
-                    {
+                    case NORTH_WEST -> {
                         assertEquals(animal1.getPosition(), new Vector2d(0, 1));
                         assertEquals(animal1.getDirection(), SOUTH_EAST);
                     }
@@ -146,17 +139,16 @@ public class AnimalTest
     }
 
     @Test
-    public void testingIfAddDescendantsToAllParentsWorksAsExpected()
-    {
-        Animal animal1 = new Animal(new Vector2d(2,2), 3, 3, 2, 2,0,0, false );
-        Animal animal2 = new Animal(new Vector2d(2,2), 3, 3, 2, 2,0,0, false );
+    public void testingIfAddDescendantsToAllParentsWorksAsExpected() {
+        Animal animal1 = new Animal(new Vector2d(2, 2), 3, 3, 2, 2, 0, 0, false);
+        Animal animal2 = new Animal(new Vector2d(2, 2), 3, 3, 2, 2, 0, 0, false);
 
         Animal animal3 = animal1.reproduce(animal2);
         assertTrue(animal1.getDescendantsNumber() == 1);
         assertTrue(animal2.getDescendantsNumber() == 1);
         assertTrue(animal3.getDescendantsNumber() == 0);
 
-        Animal animal4 = new Animal(new Vector2d(2,2), 3, 3, 2, 2,0,0, false );
+        Animal animal4 = new Animal(new Vector2d(2, 2), 3, 3, 2, 2, 0, 0, false);
 
         Animal animal5 = animal4.reproduce(animal3);
         assertTrue(animal1.getDescendantsNumber() == 2);

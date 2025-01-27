@@ -4,16 +4,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GenomeTest
-{
-    private boolean checkCreatedGenome(Animal animal1, Animal animal2, int[] createdGenome)
-    {
+class GenomeTest {
+    private boolean checkCreatedGenome(Animal animal1, Animal animal2, int[] createdGenome) {
         // first possibility
         int[] genome1 = new int[3];
 
         // w tym przypadku wybierze na poczatku 2 z jednego a potem 2 z drugiego
-        for(int i = 0; i<2; ++i)
-        {
+        for (int i = 0; i < 2; ++i) {
             genome1[i] = animal2.getGenomeAsIntList()[i];
         }
         genome1[2] = animal1.getGenomeAsIntList()[2];
@@ -21,26 +18,21 @@ class GenomeTest
         // second possibility
         int[] genome2 = new int[3];
 
-        for(int i = 0; i<2; ++i)
-        {
+        for (int i = 0; i < 2; ++i) {
             genome2[i] = animal1.getGenomeAsIntList()[i];
         }
         genome2[2] = animal2.getGenomeAsIntList()[2];
 
 
         int falseCounter = 0;
-        for( int i = 0; i<3; ++i )
-        {
-            if(genome1[i] != createdGenome[i])
-            {
+        for (int i = 0; i < 3; ++i) {
+            if (genome1[i] != createdGenome[i]) {
                 falseCounter++;
                 break;
             }
         }
-        for( int i = 0; i<3; ++i )
-        {
-            if(genome2[i] != createdGenome[i])
-            {
+        for (int i = 0; i < 3; ++i) {
+            if (genome2[i] != createdGenome[i]) {
                 falseCounter++;
                 break;
             }
@@ -49,36 +41,32 @@ class GenomeTest
     }
 
     @Test
-    void areTheValuesInGenomesBetweenGivenValuesByTheTask()
-    {
-        Animal animal1 = new Animal(new Vector2d(2,2), 10, 3, 2, 2,0,0, false );
+    void areTheValuesInGenomesBetweenGivenValuesByTheTask() {
+        Animal animal1 = new Animal(new Vector2d(2, 2), 10, 3, 2, 2, 0, 0, false);
 
         int[] genomeList = animal1.getGenomeAsIntList();
 
-        for (int i = 0 ; i < genomeList.length; ++i)
-        {
-            assertTrue( 0 <= genomeList[i] && genomeList[i] <= 7 );
+        for (int i = 0; i < genomeList.length; ++i) {
+            assertTrue(0 <= genomeList[i] && genomeList[i] <= 7);
         }
     }
 
     @Test
-    void createDefaultGenomeTest()
-    {
+    void createDefaultGenomeTest() {
         // without mutations
-        Animal animal1 = new Animal(new Vector2d(2,2), 3, 3, 2, 2,0,0, false );
-        Animal animal2 = new Animal(new Vector2d(2,2), 3, 3, 2, 2,0,0, false );
+        Animal animal1 = new Animal(new Vector2d(2, 2), 3, 3, 2, 2, 0, 0, false);
+        Animal animal2 = new Animal(new Vector2d(2, 2), 3, 3, 2, 2, 0, 0, false);
 
-        Genome genome = new Genome(animal1.getGenomeAsIntList(),3, animal2.getGenomeAsIntList(),3, 0,0);
+        Genome genome = new Genome(animal1.getGenomeAsIntList(), 3, animal2.getGenomeAsIntList(), 3, 0, 0);
 
         assertTrue(checkCreatedGenome(animal1, animal2, genome.getGenome()));
     }
 
     @Test
-    void checkIfEqualAnimalsWouldCreateTheSameGenome()
-    {
-        Animal animal1 = new Animal(new Vector2d(2,2), 3, 3, 2, 2,0,0, false );
+    void checkIfEqualAnimalsWouldCreateTheSameGenome() {
+        Animal animal1 = new Animal(new Vector2d(2, 2), 3, 3, 2, 2, 0, 0, false);
 
-        Genome genome = new Genome(animal1.getGenomeAsIntList(), 3, animal1.getGenomeAsIntList(), 3, 0,0);
+        Genome genome = new Genome(animal1.getGenomeAsIntList(), 3, animal1.getGenomeAsIntList(), 3, 0, 0);
 
         assertEquals(animal1.getGenome(), genome);
 
@@ -86,14 +74,13 @@ class GenomeTest
 
     // testing Equals method
     @Test
-    void checkIfEqualsReturnsTrueForSameGenomes()
-    {
-        Animal animal1 = new Animal(new Vector2d(2,2), 3, 3, 2, 2,0,0, false );
+    void checkIfEqualsReturnsTrueForSameGenomes() {
+        Animal animal1 = new Animal(new Vector2d(2, 2), 3, 3, 2, 2, 0, 0, false);
 
         // are fully first list
-        Genome genome1 = new Genome(animal1.getGenomeAsIntList(),3, animal1.getGenomeAsIntList(),0, 0,0);
-        Genome genome2 = new Genome(animal1.getGenomeAsIntList(),3, animal1.getGenomeAsIntList(),0, 0,0);
-        Genome genome3 = new Genome(animal1.getGenomeAsIntList(),3, animal1.getGenomeAsIntList(),0, 0,0);
+        Genome genome1 = new Genome(animal1.getGenomeAsIntList(), 3, animal1.getGenomeAsIntList(), 0, 0, 0);
+        Genome genome2 = new Genome(animal1.getGenomeAsIntList(), 3, animal1.getGenomeAsIntList(), 0, 0, 0);
+        Genome genome3 = new Genome(animal1.getGenomeAsIntList(), 3, animal1.getGenomeAsIntList(), 0, 0, 0);
         // genomes should be the same
 
         // should be symmetric
@@ -107,10 +94,9 @@ class GenomeTest
     }
 
     @Test
-    void equalsShouldReturnFalseIfGenomesAreDifferent()
-    {
-        Animal animal1 = new Animal(new Vector2d(2,2), 6, 3, 2, 2,0,0, false );
-        Animal animal2 = new Animal(new Vector2d(2,2), 6, 3, 2, 2,0,0, false );
+    void equalsShouldReturnFalseIfGenomesAreDifferent() {
+        Animal animal1 = new Animal(new Vector2d(2, 2), 6, 3, 2, 2, 0, 0, false);
+        Animal animal2 = new Animal(new Vector2d(2, 2), 6, 3, 2, 2, 0, 0, false);
 
         Genome genome1 = animal1.getGenome();
         Genome genome2 = animal2.getGenome();
@@ -120,10 +106,8 @@ class GenomeTest
         int[] genomeOfAnimal1 = animal1.getGenomeAsIntList();
         int[] genomeOfAnimal2 = animal1.getGenomeAsIntList();
 
-        for (int i = 0; i < genomeOfAnimal1.length; ++i)
-        {
-            if (genomeOfAnimal1[i] != genomeOfAnimal2[i])
-            {
+        for (int i = 0; i < genomeOfAnimal1.length; ++i) {
+            if (genomeOfAnimal1[i] != genomeOfAnimal2[i]) {
                 accidentallyEqual = false;
                 break; // mozemy sprawdzac smialo
             }
@@ -134,10 +118,9 @@ class GenomeTest
     }
 
     @Test
-    void equalsShouldReturnFalseIfGenomesOfDifferentLengths()
-    {
-        Animal animal1 = new Animal(new Vector2d(2,2), 6, 3, 2, 2,0,0, false );
-        Animal animal2 = new Animal(new Vector2d(2,2), 3, 3, 2, 2,0,0, false );
+    void equalsShouldReturnFalseIfGenomesOfDifferentLengths() {
+        Animal animal1 = new Animal(new Vector2d(2, 2), 6, 3, 2, 2, 0, 0, false);
+        Animal animal2 = new Animal(new Vector2d(2, 2), 3, 3, 2, 2, 0, 0, false);
 
         Genome genome1 = animal1.getGenome();
         Genome genome2 = animal2.getGenome();
@@ -146,18 +129,16 @@ class GenomeTest
     }
 
     @Test
-    void equalsShouldReturnFalseIfBeingComparedToDifferentType()
-    {
-        Animal animal1 = new Animal(new Vector2d(2,2), 6, 3, 2, 2,0,0, false );
+    void equalsShouldReturnFalseIfBeingComparedToDifferentType() {
+        Animal animal1 = new Animal(new Vector2d(2, 2), 6, 3, 2, 2, 0, 0, false);
         Genome genome1 = animal1.getGenome();
 
         assertFalse(genome1.equals(animal1));
     }
 
     @Test
-    void hashCodeShouldBeTheSameForSameGenome()
-    {
-        Animal animal1 = new Animal(new Vector2d(2,2), 6, 3, 2, 2,0,0, false );
+    void hashCodeShouldBeTheSameForSameGenome() {
+        Animal animal1 = new Animal(new Vector2d(2, 2), 6, 3, 2, 2, 0, 0, false);
         Genome genome1 = animal1.getGenome();
         Genome genome2 = animal1.getGenome();
 

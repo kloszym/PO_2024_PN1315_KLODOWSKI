@@ -8,9 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Animal implements WorldElement
-{
-
+public class Animal implements WorldElement {
 
 
     private MapDirections direction;
@@ -20,7 +18,7 @@ public class Animal implements WorldElement
     private int consumedPlants = 0;
 
     private int daysAlive = 0;
-    private String dayOfDeath = "Not yet dead";
+    private String dayOfDeath = "Not yet dead"; // czy String to dobry wybór?
 
     private boolean ifAnimalsMoveSlowerWhenOlder = false;
 
@@ -33,18 +31,17 @@ public class Animal implements WorldElement
 
     private final Animal[] parents; // zależy czy jest pierwszy czy ma jakichś rodziców
     private final Genome genome;
-    private int currentGenomeIndex;
+    private int currentGenomeIndex; // czy to nie powinna być część genomu?
 
     private final List<AnimalStateListener> animalStateListeners = new ArrayList<>();
 
     private final int minReproductionEnergy;
     private final int subtractingEnergyWhileReproducing;
-    private final int minNumberOfmutations;
+    private final int minNumberOfmutations; // to też
     private final int maxNumberOfmutations;
 
-    // starting position of Animal
-    public Animal(Vector2d position, int genomLength, int startingEnergy, int minReproductionEnergy, int subtractingEnergyWhileReproducing, int minNumberOfmutations, int maxNumberOfmutations, boolean ifAnimalsMoveSlowerWhenOlder)
-    {
+    // starting position of Animal // ?
+    public Animal(Vector2d position, int genomLength, int startingEnergy, int minReproductionEnergy, int subtractingEnergyWhileReproducing, int minNumberOfmutations, int maxNumberOfmutations, boolean ifAnimalsMoveSlowerWhenOlder) {
         this.position = position;
         this.minReproductionEnergy = minReproductionEnergy;
         this.subtractingEnergyWhileReproducing = subtractingEnergyWhileReproducing;
@@ -54,15 +51,14 @@ public class Animal implements WorldElement
         this.genome = new Genome(genomLength, minNumberOfmutations, maxNumberOfmutations);
         parents = null;
         generateStartingGenomeIndex();
-        direction = MapDirections.values()[ this.getGenomeAsIntList()[currentGenomeIndex] ]; // randomly generates how its turned
-        index=howManyAnimals;
+        direction = MapDirections.values()[this.getGenomeAsIntList()[currentGenomeIndex]]; // randomly generates how its turned
+        index = howManyAnimals;
         howManyAnimals++;
         this.ifAnimalsMoveSlowerWhenOlder = ifAnimalsMoveSlowerWhenOlder;
     }
 
-    // if Animal has been created by
-    public Animal(Vector2d position, Animal[] parents)
-    {
+    // if Animal has been created by // ?
+    public Animal(Vector2d position, Animal[] parents) {
         this.position = position;
         this.energy = parents[0].getSubtractingEnergyWhileReproducing() * 2;
         this.minReproductionEnergy = parents[0].getMinReproductionEnergy();
@@ -70,49 +66,45 @@ public class Animal implements WorldElement
         this.minNumberOfmutations = parents[0].getMinNumberOfmutations();
         this.maxNumberOfmutations = parents[0].getMaxNumberOfmutations();
         this.parents = parents;
-        this.genome = new Genome(parents[0].getGenomeAsIntList(),parents[0].getEnergy(),parents[1].getGenomeAsIntList(),parents[1].getEnergy(),minNumberOfmutations, maxNumberOfmutations);
+        this.genome = new Genome(parents[0].getGenomeAsIntList(), parents[0].getEnergy(), parents[1].getGenomeAsIntList(), parents[1].getEnergy(), minNumberOfmutations, maxNumberOfmutations);
         generateStartingGenomeIndex();
-        direction = MapDirections.values()[ this.getGenomeAsIntList()[currentGenomeIndex] ];
-        index=howManyAnimals;
+        direction = MapDirections.values()[this.getGenomeAsIntList()[currentGenomeIndex]];
+        index = howManyAnimals;
         howManyAnimals++;
         this.ifAnimalsMoveSlowerWhenOlder = parents[0].getIfAnimalsMoveSlowerWhenOlder();
     }
 
-    public String toString(){
+    public String toString() {
         return direction.toString();
     }
 
-    public void move(MoveValidator moveValidator)
-    {
+    public void move(MoveValidator moveValidator) {
         // corrected position based on map coordinates
-        if (!ifAnimalsMoveSlowerWhenOlder || Math.min(daysAlive / 100.0, 0.8) < Math.random()) {
-                this.direction = direction.nextByN(this.getGenomeAsIntList()[this.currentGenomeIndex]); // obrot zwierzaka w danym kierunku
-                Vector2d possibleMove = this.position.add(this.direction.toUnitVector()); // pozycja do ktorej chce sie poruszyc
+        if (!ifAnimalsMoveSlowerWhenOlder || Math.min(daysAlive / 100.0, 0.8) < Math.random()) { // nie dałoby się uniknąć tego ifa?
+            this.direction = direction.nextByN(this.getGenomeAsIntList()[this.currentGenomeIndex]); // obrot zwierzaka w danym kierunku
+            Vector2d possibleMove = this.position.add(this.direction.toUnitVector()); // pozycja do ktorej chce sie poruszyc
 
-                if (!moveValidator.canMoveTo(possibleMove)) {
-                    Boundary boundary = moveValidator.getCurrentBounds();
-                    if (possibleMove.getX() < boundary.lowerLeftCorner().getX()) // lewo
-                    {
-                        possibleMove = new Vector2d(boundary.upperRightCorner().getX(), possibleMove.getY());
-                    }
-                    else if (possibleMove.getX() > boundary.upperRightCorner().getX()) // prawo
-                    {
-                        possibleMove = new Vector2d(boundary.lowerLeftCorner().getX(), possibleMove.getY());
-                    }
-
-                    if (possibleMove.getY() > boundary.upperRightCorner().getY()
-                    ) /// gora lub dol
-                    {
-                        possibleMove = new Vector2d(possibleMove.getX(), boundary.upperRightCorner().getY());
-                        this.direction = direction.nextByN(4); // obrot o 180 stopni
-                    }
-                    else if (possibleMove.getY() < boundary.lowerLeftCorner().getY())
-                    {
-                        possibleMove = new Vector2d(possibleMove.getX(), boundary.lowerLeftCorner().getY());
-                        this.direction = direction.nextByN(4);
-                    }
-
+            if (!moveValidator.canMoveTo(possibleMove)) {
+                Boundary boundary = moveValidator.getCurrentBounds();
+                if (possibleMove.getX() < boundary.lowerLeftCorner().getX()) // lewo
+                {
+                    possibleMove = new Vector2d(boundary.upperRightCorner().getX(), possibleMove.getY());
+                } else if (possibleMove.getX() > boundary.upperRightCorner().getX()) // prawo
+                {
+                    possibleMove = new Vector2d(boundary.lowerLeftCorner().getX(), possibleMove.getY());
                 }
+
+                if (possibleMove.getY() > boundary.upperRightCorner().getY()
+                ) /// gora lub dol
+                {
+                    possibleMove = new Vector2d(possibleMove.getX(), boundary.upperRightCorner().getY());
+                    this.direction = direction.nextByN(4); // obrot o 180 stopni
+                } else if (possibleMove.getY() < boundary.lowerLeftCorner().getY()) {
+                    possibleMove = new Vector2d(possibleMove.getX(), boundary.lowerLeftCorner().getY());
+                    this.direction = direction.nextByN(4);
+                }
+
+            }
             this.position = possibleMove;
         }
         --energy;
@@ -121,24 +113,20 @@ public class Animal implements WorldElement
     }
 
 
-    private void generateStartingGenomeIndex()
-    {
-        this.currentGenomeIndex = Math.min(Math.max(0,(int)Math.round(Math.random() * (genome.getGenome().length - 1))),genome.getGenome().length);
+    private void generateStartingGenomeIndex() {
+        this.currentGenomeIndex = Math.min(Math.max(0, (int) Math.round(Math.random() * (genome.getGenome().length - 1))), genome.getGenome().length);
         initialStartingGenomeIndex = currentGenomeIndex;
     }
 
-    private void increaseGenomeIndex()
-    {
+    private void increaseGenomeIndex() {
         this.currentGenomeIndex = (this.currentGenomeIndex + 1) % genome.getGenome().length;
     }
 
-    private void decreaseEnergyLevelSinceAnimalReproduced()
-    {
+    private void decreaseEnergyLevelSinceAnimalReproduced() {
         this.energy -= this.subtractingEnergyWhileReproducing;
     }
 
-    private void addKid(Animal kid)
-    {
+    private void addKid(Animal kid) {
         kids.add(kid);
         notifyAllObservers();
     }
@@ -160,12 +148,11 @@ public class Animal implements WorldElement
         addDescendantsToAllParents(descendant, new HashSet<>());
     }
 
-    public Animal reproduce(Animal parent1)
-    {
+    public Animal reproduce(Animal parent1) {
         this.decreaseEnergyLevelSinceAnimalReproduced();
         parent1.decreaseEnergyLevelSinceAnimalReproduced();
 
-        Animal kid = new Animal(this.getPosition(), new Animal[]{this,parent1});
+        Animal kid = new Animal(this.getPosition(), new Animal[]{this, parent1});
         this.addKid(kid);
         parent1.addKid(kid);
 
@@ -178,76 +165,112 @@ public class Animal implements WorldElement
         return kid;
     }
 
-    public void increaseDaysAlive()
-    {
+    public void increaseDaysAlive() {
         ++daysAlive;
         notifyAllObservers();
     }
 
-    public void eatPlant(Plant plant)
-    {
+    public void eatPlant(Plant plant) {
         this.energy += plant.getEnergy();
         this.consumedPlants += 1;
         notifyAllObservers();
     }
 
-    public boolean isAlive(Simulation simulation)
-    {
+    public boolean isAlive(Simulation simulation) {
         boolean alive = this.energy > 0;
-        if(!alive){
+        if (!alive) {
             dayOfDeath = String.valueOf(simulation.getSimulationDays());
             notifyAllObservers();
         }
         return alive;
     }
 
-    public synchronized void addStateObserver(AnimalStateListener observer){
+    public synchronized void addStateObserver(AnimalStateListener observer) {
         animalStateListeners.add(observer);
     }
 
-    public synchronized void removeStateObserver(AnimalStateListener observer){
+    public synchronized void removeStateObserver(AnimalStateListener observer) {
         animalStateListeners.remove(observer);
     }
 
-    private void notifyAllObservers(){
-        if (!animalStateListeners.isEmpty()){
-            for(AnimalStateListener observer : animalStateListeners){
+    private void notifyAllObservers() {
+        if (!animalStateListeners.isEmpty()) {
+            for (AnimalStateListener observer : animalStateListeners) {
                 observer.animalStateChanged(this);
             }
         }
     }
 
-    public int getEnergy() { return energy; }
+    public int getEnergy() {
+        return energy;
+    }
+
     public MapDirections getDirection() {
         return direction;
     }
+
     @Override
     public Vector2d getPosition() {
         return position;
     }
-    public int[] getGenomeAsIntList() { return genome.getGenome(); }
-    public int getKidsNumber() { return kids.size(); }
-    public int getDescendantsNumber() { return descendants.size(); }
-    public int getDaysAlive() { return daysAlive; }
-    public Genome getGenome() {return genome;}
+
+    public int[] getGenomeAsIntList() {
+        return genome.getGenome();
+    }
+
+    public int getKidsNumber() {
+        return kids.size();
+    }
+
+    public int getDescendantsNumber() {
+        return descendants.size();
+    }
+
+    public int getDaysAlive() {
+        return daysAlive;
+    }
+
+    public Genome getGenome() {
+        return genome;
+    }
+
     public int getSubtractingEnergyWhileReproducing() {
         return subtractingEnergyWhileReproducing;
     }
+
     public int getMinNumberOfmutations() {
         return minNumberOfmutations;
     }
+
     public int getMaxNumberOfmutations() {
         return maxNumberOfmutations;
     }
+
     public int getMinReproductionEnergy() {
         return minReproductionEnergy;
     }
-    public int getInitialStartingGenomeIndex() {return initialStartingGenomeIndex;}
+
+    public int getInitialStartingGenomeIndex() {
+        return initialStartingGenomeIndex;
+    }
+
     public int getIndex() {
         return index;
     }
-    public int getCurrentGenomeIndex(){return currentGenomeIndex;}
-    public int getConsumedPlants(){return consumedPlants;}
-    public boolean getIfAnimalsMoveSlowerWhenOlder(){return ifAnimalsMoveSlowerWhenOlder;}
-    public String getDayOfDeath(){return dayOfDeath;}
+
+    public int getCurrentGenomeIndex() {
+        return currentGenomeIndex;
+    }
+
+    public int getConsumedPlants() {
+        return consumedPlants;
+    }
+
+    public boolean getIfAnimalsMoveSlowerWhenOlder() {
+        return ifAnimalsMoveSlowerWhenOlder;
+    }
+
+    public String getDayOfDeath() {
+        return dayOfDeath;
+    }
 }

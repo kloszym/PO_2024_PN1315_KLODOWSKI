@@ -2,7 +2,7 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.MapChangeListener;
 
-public class ConsoleMapDisplay implements MapChangeListener {
+public class ConsoleMapDisplay implements MapChangeListener { // czy to jest używane?
 
     private int howManyActualisations = 0;
 

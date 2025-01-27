@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.UUID;
+
 import static java.lang.Math.min;
 
 public class SimulationWindowPresenter implements MapChangeListener, AnimalStateListener {
@@ -95,16 +96,15 @@ public class SimulationWindowPresenter implements MapChangeListener, AnimalState
     private VBox descriptionOfSimulation;
 
 
-
     public void setupSimulation(ProjectWorldMap worldMap, int howManyAnimalsToStartWith, int howManyEnergyAnimalsStartWith,
                                 int energyNeededToReproduce, int energyGettingPassedToDescendant, int minMutationInNewborn, int maxMutationInNewborn,
                                 int genomeLength, boolean ifAnimalsMoveSlowerWhenOlder, boolean writeIntoACSVFile,
                                 Stage simulationStage) {
         this.worldMap = worldMap;
         stage = simulationStage;
-        BorderPane.setMargin(mapGrid, new Insets(12,12,12,12));
+        BorderPane.setMargin(mapGrid, new Insets(12, 12, 12, 12));
         this.simulation = new Simulation(worldMap, howManyAnimalsToStartWith, howManyEnergyAnimalsStartWith,
-                energyNeededToReproduce, energyGettingPassedToDescendant,minMutationInNewborn, maxMutationInNewborn,
+                energyNeededToReproduce, energyGettingPassedToDescendant, minMutationInNewborn, maxMutationInNewborn,
                 genomeLength, ifAnimalsMoveSlowerWhenOlder, writeIntoACSVFile);
         Map<UUID, Simulation> simulationsMap = new HashMap<>();
         simulationsMap.put(worldMap.getID(), simulation);
@@ -119,16 +119,16 @@ public class SimulationWindowPresenter implements MapChangeListener, AnimalState
         GridPane.setHalignment(label, HPos.CENTER);
         int widthtOfMap = boundary.upperRightCorner().getX();
         int heightOfMap = boundary.upperRightCorner().getY();
-        double windowWidthToMapWidthRatio = (stage.getWidth()-180.0) / (widthtOfMap+1);
-        double windowHeightToMapWidthRatio = (stage.getHeight()-100.0) / (heightOfMap+1);
+        double windowWidthToMapWidthRatio = (stage.getWidth() - 180.0) / (widthtOfMap + 1);
+        double windowHeightToMapWidthRatio = (stage.getHeight() - 100.0) / (heightOfMap + 1);
 
-        int cellSideLength = (int)(min(windowHeightToMapWidthRatio,windowWidthToMapWidthRatio));
+        int cellSideLength = (int) (min(windowHeightToMapWidthRatio, windowWidthToMapWidthRatio));
 
-        double fullHealth = cellSideLength-cellSideLength/10.0;
-        Insets healthBarMargin = new Insets(0,0,0,cellSideLength/10.0);
+        double fullHealth = cellSideLength - cellSideLength / 10.0;
+        Insets healthBarMargin = new Insets(0, 0, 0, cellSideLength / 10.0);
 
-        for (int i = 0; i <= widthtOfMap;i++){
-            for (int j = 0; j <= heightOfMap;j++){
+        for (int i = 0; i <= widthtOfMap; i++) {
+            for (int j = 0; j <= heightOfMap; j++) {
 
                 ImageView tileView = new ImageView(tile);
                 tileView.setFitHeight(cellSideLength);
@@ -136,27 +136,26 @@ public class SimulationWindowPresenter implements MapChangeListener, AnimalState
                 mapGrid.add(tileView, i, j);
             }
         }
-        for (int i = 0; i < widthtOfMap+1;i++){
+        for (int i = 0; i < widthtOfMap + 1; i++) {
             mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSideLength));
         }
-        for (int i = 0; i < heightOfMap+1;i++){
+        for (int i = 0; i < heightOfMap + 1; i++) {
             mapGrid.getRowConstraints().add(new RowConstraints(cellSideLength));
         }
 
         List<WorldElement> elements = map.getElements();
-        for (WorldElement element : elements)
-        {
+        for (WorldElement element : elements) {
             Vector2d positionOfElement = element.getPosition();
             ImageView worldElement = worldElementVisualizer.getImageView(element);
             worldElement.setFitHeight(cellSideLength);
             worldElement.setFitWidth(cellSideLength);
-            mapGrid.add(worldElement, positionOfElement.getX() , heightOfMap - positionOfElement.getY());
+            mapGrid.add(worldElement, positionOfElement.getX(), heightOfMap - positionOfElement.getY());
             GridPane.setHalignment(worldElement, HPos.CENTER);
-            if (element.getClass()== Animal.class){
-                Rectangle healthbar = new Rectangle(fullHealth,cellSideLength/10.0, new Color(0,0,0,1));
-                Rectangle health = new Rectangle(fullHealth*(min(1.0, ((Animal) element).getEnergy()/(double)((Animal) element).getMinReproductionEnergy())),cellSideLength/10.0, new Color(0,1,0,1));
-                mapGrid.add(healthbar, positionOfElement.getX() , heightOfMap - positionOfElement.getY());
-                mapGrid.add(health, positionOfElement.getX() , heightOfMap - positionOfElement.getY());
+            if (element.getClass() == Animal.class) {
+                Rectangle healthbar = new Rectangle(fullHealth, cellSideLength / 10.0, new Color(0, 0, 0, 1));
+                Rectangle health = new Rectangle(fullHealth * (min(1.0, ((Animal) element).getEnergy() / (double) ((Animal) element).getMinReproductionEnergy())), cellSideLength / 10.0, new Color(0, 1, 0, 1));
+                mapGrid.add(healthbar, positionOfElement.getX(), heightOfMap - positionOfElement.getY());
+                mapGrid.add(health, positionOfElement.getX(), heightOfMap - positionOfElement.getY());
                 GridPane.setHalignment(healthbar, HPos.LEFT);
                 GridPane.setValignment(healthbar, VPos.BOTTOM);
                 GridPane.setHalignment(health, HPos.LEFT);
@@ -173,9 +172,8 @@ public class SimulationWindowPresenter implements MapChangeListener, AnimalState
         mapGrid.getRowConstraints().clear();
     }
 
-    public void drawCurrentDayInfo(ProjectWorldMap worldMap)
-    {
-        collectData = new DailyDataCollector(worldMap, simulation.getDeadAnimals(),simulation.getSimulationDays());
+    public void drawCurrentDayInfo(ProjectWorldMap worldMap) {
+        collectData = new DailyDataCollector(worldMap, simulation.getDeadAnimals(), simulation.getSimulationDays());
 
         numberOfDays.setText(String.valueOf(collectData.getCurrentSimulationDay()));
         numberOfAnimals.setText(String.valueOf(collectData.numberOfAliveAnimals()));
@@ -214,15 +212,14 @@ public class SimulationWindowPresenter implements MapChangeListener, AnimalState
     }
 
     @FXML
-    private void onPauseAndResumeButtonClicked(){
-        if (!isPaused){
+    private void onPauseAndResumeButtonClicked() {
+        if (!isPaused) {
             simulationEngine.pauseSpecificSimulation(worldMap.getID());
             pauseAndResumeButton.setText("Resume Button");
             Platform.runLater(() -> {
                 drawMapOnPause(worldMap);
             });
-        }
-        else{
+        } else {
             simulationEngine.resumeSpecificSimulation(worldMap.getID());
             pauseAndResumeButton.setText("Pause Button");
         }
@@ -238,22 +235,22 @@ public class SimulationWindowPresenter implements MapChangeListener, AnimalState
         int widthtOfMap = boundary.upperRightCorner().getX();
         int heightOfMap = boundary.upperRightCorner().getY();
 
-        double windowWidthToMapWidthRatio = (stage.getWidth()-180.0) / (widthtOfMap+1);
-        double windowHeightToMapWidthRatio = (stage.getHeight()-100.0) / (heightOfMap+1);
+        double windowWidthToMapWidthRatio = (stage.getWidth() - 180.0) / (widthtOfMap + 1);
+        double windowHeightToMapWidthRatio = (stage.getHeight() - 100.0) / (heightOfMap + 1);
 
-        int cellSideLength = (int)(min(windowHeightToMapWidthRatio,windowWidthToMapWidthRatio));
+        int cellSideLength = (int) (min(windowHeightToMapWidthRatio, windowWidthToMapWidthRatio));
 
         ColorAdjust colorAdjust = new ColorAdjust();
         colorAdjust.setHue(1.0);
 
-        double fullHealth = cellSideLength-cellSideLength/10.0;
-        Insets healthBarMargin = new Insets(0,0,0,cellSideLength/10.0);
+        double fullHealth = cellSideLength - cellSideLength / 10.0;
+        Insets healthBarMargin = new Insets(0, 0, 0, cellSideLength / 10.0);
 
-        for (int i = 0; i <= widthtOfMap;i++){
-            for (int j = 0; j <= heightOfMap;j++){
+        for (int i = 0; i <= widthtOfMap; i++) {
+            for (int j = 0; j <= heightOfMap; j++) {
 
                 ImageView tileView;
-                if ( map.isPositionMoreDesirableForPlants(new Vector2d(i, heightOfMap - j)))
+                if (map.isPositionMoreDesirableForPlants(new Vector2d(i, heightOfMap - j)))
                     tileView = new ImageView(equator);
                 else
                     tileView = new ImageView(tile);
@@ -262,41 +259,40 @@ public class SimulationWindowPresenter implements MapChangeListener, AnimalState
                 mapGrid.add(tileView, i, j);
             }
         }
-        for (int i = 0; i < widthtOfMap+1;i++){
+        for (int i = 0; i < widthtOfMap + 1; i++) {
             mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSideLength));
         }
-        for (int i = 0; i < heightOfMap+1;i++){
+        for (int i = 0; i < heightOfMap + 1; i++) {
             mapGrid.getRowConstraints().add(new RowConstraints(cellSideLength));
         }
         List<WorldElement> elements = map.getElements();
-        for (WorldElement element : elements ){
+        for (WorldElement element : elements) {
             Vector2d positionOfElement = element.getPosition();
             ImageView worldElement = worldElementVisualizer.getImageView(element);
             worldElement.setFitHeight(cellSideLength);
             worldElement.setFitWidth(cellSideLength);
-            if (element.getClass() == Animal.class){
+            if (element.getClass() == Animal.class) {
                 Animal animal = (Animal) element;
                 Genome genome = animal.getGenome();
                 int[] genomeAsList = genome.getGenome();
                 boolean genomeIsPopular = false;
-                for (List<Integer> popularGenome: collectData.mostPopularGenotype()){
-                    for(int i = 0; i < popularGenome.size(); i++){
-                        if( genomeAsList[i] == popularGenome.get(i)){
+                for (List<Integer> popularGenome : collectData.mostPopularGenotype()) {
+                    for (int i = 0; i < popularGenome.size(); i++) {
+                        if (genomeAsList[i] == popularGenome.get(i)) {
                             genomeIsPopular = true;
-                        }
-                        else{
+                        } else {
                             genomeIsPopular = false;
                             break;
                         }
                     }
-                    if(genomeIsPopular){
+                    if (genomeIsPopular) {
                         worldElement.setEffect(colorAdjust);
                     }
                 }
-                Rectangle healthbar = new Rectangle(fullHealth,cellSideLength/10.0, new Color(0,0,0,1));
-                Rectangle health = new Rectangle(fullHealth*(min(1.0, ((Animal) element).getEnergy()/(double)((Animal) element).getMinReproductionEnergy())),cellSideLength/10.0, new Color(0,1,0,1));
-                mapGrid.add(healthbar, positionOfElement.getX() , heightOfMap - positionOfElement.getY());
-                mapGrid.add(health, positionOfElement.getX() , heightOfMap - positionOfElement.getY());
+                Rectangle healthbar = new Rectangle(fullHealth, cellSideLength / 10.0, new Color(0, 0, 0, 1));
+                Rectangle health = new Rectangle(fullHealth * (min(1.0, ((Animal) element).getEnergy() / (double) ((Animal) element).getMinReproductionEnergy())), cellSideLength / 10.0, new Color(0, 1, 0, 1));
+                mapGrid.add(healthbar, positionOfElement.getX(), heightOfMap - positionOfElement.getY());
+                mapGrid.add(health, positionOfElement.getX(), heightOfMap - positionOfElement.getY());
                 GridPane.setHalignment(healthbar, HPos.LEFT);
                 GridPane.setValignment(healthbar, VPos.BOTTOM);
                 GridPane.setHalignment(health, HPos.LEFT);
@@ -304,13 +300,13 @@ public class SimulationWindowPresenter implements MapChangeListener, AnimalState
                 GridPane.setMargin(healthbar, healthBarMargin);
                 GridPane.setMargin(health, healthBarMargin);
             }
-            mapGrid.add(worldElement, positionOfElement.getX() , heightOfMap - positionOfElement.getY());
+            mapGrid.add(worldElement, positionOfElement.getX(), heightOfMap - positionOfElement.getY());
             GridPane.setHalignment(worldElement, HPos.CENTER);
-            worldElement.setOnMouseClicked((e)->onAnimalClick((Animal) element));
+            worldElement.setOnMouseClicked((e) -> onAnimalClick((Animal) element));
         }
     }
 
-    private void onAnimalClick(Animal animal){
+    private void onAnimalClick(Animal animal) {
         descriptionOfSimulation.getChildren().remove(idLabel);
         descriptionOfSimulation.getChildren().remove(genomeLabel);
         descriptionOfSimulation.getChildren().remove(genomeIndexLabel);
@@ -360,9 +356,9 @@ public class SimulationWindowPresenter implements MapChangeListener, AnimalState
     }
 
     @Override
-    public void animalStateChanged(Animal animal){
-        Platform.runLater(()->{
-            if (animal==followedAnimal){
+    public void animalStateChanged(Animal animal) {
+        Platform.runLater(() -> {
+            if (animal == followedAnimal) {
                 idLabel.setText("Id of followed animal: %d".formatted(animal.getIndex()));
                 genomeLabel.setText("Genome of animal: %s".formatted(animal.getGenome()));
                 genomeIndexLabel.setText("Index of current gen: %d".formatted(animal.getCurrentGenomeIndex()));
@@ -376,7 +372,7 @@ public class SimulationWindowPresenter implements MapChangeListener, AnimalState
         });
     }
 
-    private void onStopFollowingClick(){
+    private void onStopFollowingClick() {
         descriptionOfSimulation.getChildren().remove(idLabel);
         descriptionOfSimulation.getChildren().remove(genomeLabel);
         descriptionOfSimulation.getChildren().remove(genomeIndexLabel);

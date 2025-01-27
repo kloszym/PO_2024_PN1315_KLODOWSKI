@@ -7,8 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class MapDirectionsTest {
 
     @Test
-    void checkIfNextMethodWritesNextDirection()
-    {
+    void checkIfNextMethodWritesNextDirection() {
         assertEquals(MapDirections.NORTH.next(), MapDirections.NORTH_EAST);
         assertEquals(MapDirections.NORTH_EAST.next(), MapDirections.EAST);
         assertEquals(MapDirections.EAST.next(), MapDirections.SOUTH_EAST);
@@ -21,8 +20,7 @@ class MapDirectionsTest {
 
 
     @Test
-    void checkIfPreviousMethodWritePreviousDirection()
-    {
+    void checkIfPreviousMethodWritePreviousDirection() {
         assertEquals(MapDirections.NORTH.previous(), MapDirections.NORTH_WEST);
         assertEquals(MapDirections.NORTH_WEST.previous(), MapDirections.WEST);
         assertEquals(MapDirections.WEST.previous(), MapDirections.SOUTH_WEST);
@@ -34,8 +32,7 @@ class MapDirectionsTest {
     }
 
     @Test
-    void changeFromEnumToString()
-    {
+    void changeFromEnumToString() {
         assertEquals(MapDirections.NORTH.toString(), "^");
         assertEquals(MapDirections.NORTH_EAST.toString(), "◥");
         assertEquals(MapDirections.EAST.toString(), ">");
@@ -47,8 +44,7 @@ class MapDirectionsTest {
     }
 
     @Test
-    void checkIfNextByNGivesCorrectValues()
-    {
+    void checkIfNextByNGivesCorrectValues() {
         MapDirections mapDirections = MapDirections.NORTH;
         assertEquals(mapDirections.ordinal(), 0);
 
@@ -57,11 +53,10 @@ class MapDirectionsTest {
 
         // does it give correct output when out of the 0-7 scope
         MapDirections againNewDirection = newDirection.nextByN(5);
-        assertEquals(againNewDirection.ordinal(), (5+5) % 8);
+        assertEquals(againNewDirection.ordinal(), (5 + 5) % 8);
     }
 
 }
-
 
 
 //

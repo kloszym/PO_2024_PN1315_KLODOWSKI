@@ -2,24 +2,21 @@ package agh.ics.oop.model;
 
 import java.util.Objects;
 
-public class Genome
-{
-   private final int[] genome; // since not resizeable we can use a static array
+public class Genome {
+    private final int[] genome; // since not resizeable we can use a static array // słowo static jest dwuznaczne
 
     private final int minNumberOfMutations;
     private final int maxNumberOfMutations;
 
 
-   public Genome(int genomLength, int minNumberOfMutations, int maxNumberOfMutations)
-   {
-       this.minNumberOfMutations = minNumberOfMutations;
-       this.maxNumberOfMutations = maxNumberOfMutations;
+    public Genome(int genomLength, int minNumberOfMutations, int maxNumberOfMutations) {
+        this.minNumberOfMutations = minNumberOfMutations;
+        this.maxNumberOfMutations = maxNumberOfMutations;
         genome = new int[genomLength];
-        createGenome();
-   }
+        createGenome(); // trochę rekurencja ogonowa
+    }
 
-    public Genome(int[] genome1, int energy1, int[] genome2, int energy2, int minNumberOfMutations, int maxNumberOfMutations)
-    {
+    public Genome(int[] genome1, int energy1, int[] genome2, int energy2, int minNumberOfMutations, int maxNumberOfMutations) {
         this.minNumberOfMutations = minNumberOfMutations;
         this.maxNumberOfMutations = maxNumberOfMutations;
         genome = new int[genome1.length];
@@ -27,86 +24,77 @@ public class Genome
         mutate(mutationNumber());
     }
 
-   public int[] getGenome()
-   {
-       return genome; // the genome should be available to know which direction the
-       // animal is going to move
-   }
+    public int[] getGenome() {
+        return genome; // the genome should be available to know which direction the
+        // animal is going to move // dehermetyzacja
+    }
 
-   private void createGenome(int[] genome1, int energy1, int[] genome2, int energy2)
-   {
-        float percentageOfParent1 = (float)energy1 / (energy1 + energy2); // checks the percentage based on the animals energy
+    private void createGenome(int[] genome1, int energy1, int[] genome2, int energy2) {
+        float percentageOfParent1 = (float) energy1 / (energy1 + energy2); // checks the percentage based on the animals energy
         int indexToInheritData = 0;
         if (Math.random() < 0.5) // lewa strona jest parenta1
         {
-            for (int i = 0; i < percentageOfParent1 * genome.length; indexToInheritData++, i++)
-            {
+            for (int i = 0; i < percentageOfParent1 * genome.length; indexToInheritData++, i++) {
                 genome[i] = genome1[i];
             }
-            for (int i = indexToInheritData; i < genome.length; indexToInheritData++, i++)
-            {
+            for (int i = indexToInheritData; i < genome.length; indexToInheritData++, i++) {
                 genome[i] = genome2[i];
             }
-        }
-        else
-        {
-            for (int i = 0; i < (1-percentageOfParent1) * genome.length; indexToInheritData++, i++)
-            {
+        } else {
+            for (int i = 0; i < (1 - percentageOfParent1) * genome.length; indexToInheritData++, i++) {
                 genome[i] = genome2[i];
             }
-            for (int i = indexToInheritData; i < genome.length; indexToInheritData++, i++)
-            {
+            for (int i = indexToInheritData; i < genome.length; indexToInheritData++, i++) {
                 genome[i] = genome1[i];
             }
         }
 
-   }
+    }
 
-    private void createGenome()
-    {
-        for (int i = 0; i < genome.length; i++)
-        {
-            genome[i] = (int)Math.round(Math.random() * 7); // losuje całkowicie nowy genom
+    private void createGenome() {
+        for (int i = 0; i < genome.length; i++) {
+            genome[i] = (int) Math.round(Math.random() * 7); // losuje całkowicie nowy genom
         }
     }
 
-   private void mutate( int mutations )
-   {
-       int[] mutatingPossibilities = new int[8];
-       int[] indexes = new int[genome.length];
+    private void mutate(int mutations) {
+        int[] mutatingPossibilities = new int[8];
+        int[] indexes = new int[genome.length];
 
-       for (int i = 0; i < genome.length; i++) { indexes[i] = i; } //wpisuje indeksy od 0 ... genome.length - 1
-       for(int i = 0; i < 8; i++){ mutatingPossibilities[i] = i; }
-
-
-       for (int i = 0; i < Math.min(mutations,genome.length); i++ )
-       {
-           int generatedPosition = (int)(Math.random() * ( genome.length - 1 - i)); // losuje pozycje ktora ma zmienic
-           int whatIsInsideOfGenomeInThatPosition = genome[indexes[generatedPosition]];
-
-           // last element of mutating possibilities
-           mutatingPossibilities[7] = whatIsInsideOfGenomeInThatPosition;
-           mutatingPossibilities[whatIsInsideOfGenomeInThatPosition] = 7;
-           // last element of muting possibilities
-
-           genome[indexes[generatedPosition]] = mutatingPossibilities[(int)Math.round(Math.random() * 7)]; //  losuje na jaki genom ma byc genom zmieniony
-
-           // go back to stage 1 of generation
-           mutatingPossibilities[whatIsInsideOfGenomeInThatPosition] = whatIsInsideOfGenomeInThatPosition;
-           mutatingPossibilities[7] = 7;
+        for (int i = 0; i < genome.length; i++) {
+            indexes[i] = i;
+        } //wpisuje indeksy od 0 ... genome.length - 1
+        for (int i = 0; i < 8; i++) {
+            mutatingPossibilities[i] = i;
+        }
 
 
-           // swap positions
-           int tempIndex = indexes[indexes.length - 1 - i];
-           indexes[indexes.length - 1 - i] = indexes[generatedPosition];
-           indexes[generatedPosition] = tempIndex;
-       }
-   }
+        for (int i = 0; i < Math.min(mutations, genome.length); i++) {
+            int generatedPosition = (int) (Math.random() * (genome.length - 1 - i)); // losuje pozycje ktora ma zmienic
+            int whatIsInsideOfGenomeInThatPosition = genome[indexes[generatedPosition]];
 
-   private int mutationNumber()
-   {
-       return (int)Math.floor(Math.random() * (maxNumberOfMutations - minNumberOfMutations + 1) + minNumberOfMutations);
-   }
+            // last element of mutating possibilities
+            mutatingPossibilities[7] = whatIsInsideOfGenomeInThatPosition;
+            mutatingPossibilities[whatIsInsideOfGenomeInThatPosition] = 7;
+            // last element of muting possibilities
+
+            genome[indexes[generatedPosition]] = mutatingPossibilities[(int) Math.round(Math.random() * 7)]; //  losuje na jaki genom ma byc genom zmieniony
+
+            // go back to stage 1 of generation
+            mutatingPossibilities[whatIsInsideOfGenomeInThatPosition] = whatIsInsideOfGenomeInThatPosition;
+            mutatingPossibilities[7] = 7;
+
+
+            // swap positions
+            int tempIndex = indexes[indexes.length - 1 - i];
+            indexes[indexes.length - 1 - i] = indexes[generatedPosition];
+            indexes[generatedPosition] = tempIndex;
+        }
+    }
+
+    private int mutationNumber() { // nazwa
+        return (int) Math.floor(Math.random() * (maxNumberOfMutations - minNumberOfMutations + 1) + minNumberOfMutations);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -115,9 +103,8 @@ public class Genome
         Genome genome2 = (Genome) o;
         if (genome.length != genome2.genome.length) return false;
 
-        for (int i = 0; i < genome.length; i++)
-        {
-            if(genome[i] != genome2.genome[i])
+        for (int i = 0; i < genome.length; i++) {
+            if (genome[i] != genome2.genome[i])
                 return false;
         }
         return true;
@@ -129,11 +116,11 @@ public class Genome
     }
 
     @Override
-    public String toString(){
-       StringBuilder string = new StringBuilder("[");
-       for (int gen : getGenome()){
-           string.append(gen).append(", ");
-       }
-       return string + "]";
+    public String toString() {
+        StringBuilder string = new StringBuilder("[");
+        for (int gen : getGenome()) {
+            string.append(gen).append(", ");
+        }
+        return string + "]";
     }
 }

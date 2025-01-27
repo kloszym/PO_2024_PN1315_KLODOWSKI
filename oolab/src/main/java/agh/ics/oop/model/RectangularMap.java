@@ -7,7 +7,7 @@ public class RectangularMap extends AbstractWorldMap {
     // Szerokość i wysokość mapy to odpowiednio x i y UPPER_RIGHT_MAP_CORNER zwiększone o 1
 
     public RectangularMap(int width, int height) {
-        upperRightMapCorner = new Vector2d(width-1, height-1);
+        upperRightMapCorner = new Vector2d(width - 1, height - 1);
     }
 
     @Override
@@ -16,7 +16,7 @@ public class RectangularMap extends AbstractWorldMap {
     }
 
     @Override
-    public Boundary getCurrentBounds(){
+    public Boundary getCurrentBounds() {
         return new Boundary(lowerLeftMapCorner, upperRightMapCorner);
     }
 }

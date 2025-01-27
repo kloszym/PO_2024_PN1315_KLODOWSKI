@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public interface ProjectWorldMap extends MoveValidator{
+public interface ProjectWorldMap extends MoveValidator { // czy ten interfejs coś wnosi?
 
     /**
      * Place an animal on the map.
@@ -24,23 +24,20 @@ public interface ProjectWorldMap extends MoveValidator{
 
 
     /**
-     *
      * @return List of <WorldElement>
-     *
      */
 
     List<WorldElement> getElements();
 
     /**
-     *
      * @return id of map
-     *
      */
 
     UUID getID();
 
     /**
      * Kill an animal - it means move it to delete it from animal map
+     *
      * @param animal to kill
      */
 
@@ -67,26 +64,24 @@ public interface ProjectWorldMap extends MoveValidator{
     boolean isPositionMoreDesirableForPlants(Vector2d position);
 
     /**
-     *
      * @return List of animals
      */
 
     List<Animal> getAnimalsList();
 
     /**
-     *
      * @return List of plants
      */
     List<Plant> getPlantsList();
-  
+
     /**
-     *
      * @return Set of occupied positions on map
      */
     Set<Vector2d> occupiedPositions();
 
     /**
      * Add AnimalBornListener to list of animalBornListeners
+     *
      * @param listener that listen animal birth
      */
     void addAnimalBornListener(AnimalBornListener listener);

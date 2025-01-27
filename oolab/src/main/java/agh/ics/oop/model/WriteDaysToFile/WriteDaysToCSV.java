@@ -1,4 +1,4 @@
-package agh.ics.oop.model.WriteDaysToFile;
+package agh.ics.oop.model.WriteDaysToFile; // nazwa
 
 import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.ProjectWorldMap;
@@ -8,8 +8,8 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class WriteDaysToCSV {
-    DailyDataCollector dailyDataCollector;
+public class WriteDaysToCSV { // nazwa
+    DailyDataCollector dailyDataCollector; // modyfikator dostępu?
 
     public WriteDaysToCSV(ProjectWorldMap projectWorldMap, List<Animal> deadAnimals, int currentSimulationDay) {
         dailyDataCollector = new DailyDataCollector(projectWorldMap, deadAnimals, currentSimulationDay);
@@ -26,18 +26,18 @@ public class WriteDaysToCSV {
                         String.valueOf(numberOfAnimals), String.valueOf(numberOfPlants),
 
                         mostPopularGenotype.stream()
-                                            .map(String::valueOf)
-                                            .collect(Collectors.joining(" ")),
+                                .map(String::valueOf)
+                                .collect(Collectors.joining(" ")),
 
                         String.valueOf(averageEnergyLevel),
                         averageDaysAlive.map(String::valueOf)
-                                        .orElse("No data available"),
+                                .orElse("No data available"),
                         String.valueOf(averageKidsNumber)
 
                 });
     }
 
-    private List<String> beginningOfFile() {
+    private List<String> beginningOfFile() { // nazwa
         return Arrays.asList
                 (
                         "Day",
@@ -72,7 +72,7 @@ public class WriteDaysToCSV {
                     dailyDataCollector.averageLifeSpan(),
                     dailyDataCollector.averageKidsNumber()
             ));
-            
+
             pw.println(csvLine);
         } catch (FileNotFoundException e) {
             System.err.println(e.getMessage());

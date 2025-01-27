@@ -4,11 +4,11 @@ import agh.ics.oop.model.Vector2d;
 
 import java.util.*;
 
-public class RandomPositionForPlantsGenerator{
+public class RandomPositionForPlantsGenerator {
 
 
     private final Vector2d upperRightMapCorner;
-    private final Vector2d lowerLeftMapCorner = new Vector2d(0,0);
+    private final Vector2d lowerLeftMapCorner = new Vector2d(0, 0);
     private final Vector2d upperRightEquatorCorner;
     private final Vector2d lowerLeftEquatorCorner;
     private final List<Vector2d> positionsLessDesirable = new ArrayList<>();
@@ -20,17 +20,16 @@ public class RandomPositionForPlantsGenerator{
     private final List<Vector2d> positionsWithDeadAnimals = new ArrayList<>();
 
     public RandomPositionForPlantsGenerator(int height, int width, Vector2d upperRightEquatorCorner, Vector2d lowerLeftEquatorCorner, boolean ifPlantsPreferDeadBodies) {
-        upperRightMapCorner = new Vector2d(height-1, width-1);
+        upperRightMapCorner = new Vector2d(height - 1, width - 1);
         this.upperRightEquatorCorner = upperRightEquatorCorner;
         this.lowerLeftEquatorCorner = lowerLeftEquatorCorner;
-        this.ifPlantsPreferDeadBodies=ifPlantsPreferDeadBodies;
-        for (int i=0; i<width; i++){
-            for (int j=0; j<height; j++){
-                Vector2d position = new Vector2d(i,j);
-                if (position.follows(lowerLeftEquatorCorner) && position.precedes(upperRightEquatorCorner)){
+        this.ifPlantsPreferDeadBodies = ifPlantsPreferDeadBodies;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                Vector2d position = new Vector2d(i, j);
+                if (position.follows(lowerLeftEquatorCorner) && position.precedes(upperRightEquatorCorner)) {
                     positionsMoreDesirable.add(position);
-                }
-                else{
+                } else {
                     positionsLessDesirable.add(position);
                 }
             }
@@ -44,15 +43,14 @@ public class RandomPositionForPlantsGenerator{
     public Vector2d generatePosition() {
         int randomNumber = rand.nextInt(10);
         Vector2d position;
-        if (randomNumber == 0 || randomNumber == 1){
+        if (randomNumber == 0 || randomNumber == 1) {
             position = chooseFromLessDesirables();
-            if (position == null){
+            if (position == null) {
                 position = chooseFromMoreDesirables();
             }
-        }
-        else{
+        } else {
             position = chooseFromMoreDesirables();
-            if (position == null){
+            if (position == null) {
                 position = chooseFromLessDesirables();
             }
         }
@@ -60,7 +58,7 @@ public class RandomPositionForPlantsGenerator{
     }
 
     private Vector2d chooseFromLessDesirables() {
-        if (lessDesirableGenerationRange == 0){
+        if (lessDesirableGenerationRange == 0) {
             return null;
         }
         int indexOfArray = rand.nextInt(lessDesirableGenerationRange);
@@ -71,34 +69,30 @@ public class RandomPositionForPlantsGenerator{
         return position;
     }
 
-    private Vector2d chooseFromMoreDesirables(){
-        if(ifPlantsPreferDeadBodies){
+    private Vector2d chooseFromMoreDesirables() {
+        if (ifPlantsPreferDeadBodies) {
             int deadOrEquator = rand.nextInt(2);
             //dead = 0
-            if (deadOrEquator == 0){
-                if (chooseFromDeadAnimalList() == null){
+            if (deadOrEquator == 0) {
+                if (chooseFromDeadAnimalList() == null) {
                     return chooseFromMoreDesirablesList();
-                }
-                else{
+                } else {
                     return chooseFromDeadAnimalList();
                 }
-            }
-            else{
-                if (chooseFromMoreDesirablesList() == null){
+            } else {
+                if (chooseFromMoreDesirablesList() == null) {
                     return chooseFromDeadAnimalList();
-                }
-                else{
+                } else {
                     return chooseFromMoreDesirablesList();
                 }
             }
-        }
-        else{
+        } else {
             return chooseFromMoreDesirablesList();
         }
     }
 
-    private Vector2d chooseFromMoreDesirablesList(){
-        if (moreDesirableGenerationRange == 0){
+    private Vector2d chooseFromMoreDesirablesList() {
+        if (moreDesirableGenerationRange == 0) {
             return null;
         }
         int indexOfArray = rand.nextInt(moreDesirableGenerationRange);
@@ -109,44 +103,42 @@ public class RandomPositionForPlantsGenerator{
         return position;
     }
 
-    private Vector2d chooseFromDeadAnimalList(){
-        if (positionsWithDeadAnimals.isEmpty()){
+    private Vector2d chooseFromDeadAnimalList() {
+        if (positionsWithDeadAnimals.isEmpty()) {
             return null;
         }
         int indexOfArray = rand.nextInt(positionsWithDeadAnimals.size());
         Vector2d position = positionsWithDeadAnimals.get(indexOfArray);
-        Collections.swap(positionsWithDeadAnimals, indexOfArray, positionsWithDeadAnimals.size()-1);
+        Collections.swap(positionsWithDeadAnimals, indexOfArray, positionsWithDeadAnimals.size() - 1);
         positionsWithDeadAnimals.remove(positionsWithDeadAnimals.size());
         return position;
     }
 
 
-
-    public void addPositionToGenerator(Vector2d position){
-        if (position.follows(lowerLeftEquatorCorner) && position.precedes(upperRightEquatorCorner)){
+    public void addPositionToGenerator(Vector2d position) {
+        if (position.follows(lowerLeftEquatorCorner) && position.precedes(upperRightEquatorCorner)) {
             positionsMoreDesirable.add(position);
             moreDesirableGenerationRange++;
-        }
-        else{
+        } else {
             positionsLessDesirable.add(position);
             lessDesirableGenerationRange++;
         }
     }
 
-    public void addPositionOfDeadAnimal(Vector2d position){
+    public void addPositionOfDeadAnimal(Vector2d position) {
         List<Vector2d> positionsToAdd = List.of(
                 position,
-                position.add(new Vector2d(0,1)),
-                position.add(new Vector2d(1,1)),
-                position.add(new Vector2d(1,0)),
-                position.add(new Vector2d(1,-1)),
-                position.add(new Vector2d(0,-1)),
-                position.add(new Vector2d(-1,-1)),
-                position.add(new Vector2d(-1,0)),
-                position.add(new Vector2d(-1,1))
+                position.add(new Vector2d(0, 1)),
+                position.add(new Vector2d(1, 1)),
+                position.add(new Vector2d(1, 0)),
+                position.add(new Vector2d(1, -1)),
+                position.add(new Vector2d(0, -1)),
+                position.add(new Vector2d(-1, -1)),
+                position.add(new Vector2d(-1, 0)),
+                position.add(new Vector2d(-1, 1)) // dużo nowych wektorów co wywołanie
         );
-        for (Vector2d pos: positionsToAdd){
-            if (pos.follows(lowerLeftMapCorner) && pos.precedes(upperRightMapCorner)){
+        for (Vector2d pos : positionsToAdd) {
+            if (pos.follows(lowerLeftMapCorner) && pos.precedes(upperRightMapCorner)) {
                 positionsWithDeadAnimals.add(pos);
             }
         }
