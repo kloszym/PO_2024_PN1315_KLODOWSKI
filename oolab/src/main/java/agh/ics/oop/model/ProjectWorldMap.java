@@ -1,6 +1,9 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.util.AnimalBornListener;
+
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface ProjectWorldMap extends MoveValidator{
@@ -55,5 +58,61 @@ public interface ProjectWorldMap extends MoveValidator{
 
     UUID getID();
 
+    /**
+     * Kill an animal - it means move it to delete it from animal map
+     * @param animal
+     */
 
+    void killAnimal(Animal animal);
+
+    /**
+     * Make animals love each other
+     */
+    void animalsReproducing();
+
+    /**
+     * Growing plants on our Globe is very important
+     */
+    void growPlants();
+
+    /**
+     * When out animals are hungry
+     */
+    void eatingPlants();
+
+    /**
+     *
+     */
+    boolean isPositionMoreDesirableForPlants(Vector2d position);
+
+    /**
+     *
+     * @return List of animals
+     */
+
+    List<Animal> getAnimalsList();
+
+    /**
+     *
+     * @return List of plants
+     */
+    List<Plant> getPlantsList();
+  
+    /**
+     *
+     * @return Set of occupied positions on map
+     */
+    Set<Vector2d> occupiedPositions();
+
+    /**
+     * Add AnimalBornListener to list of animalBornListeners
+     * @param listener
+     */
+    void addAnimalBornListener(AnimalBornListener listener);
+
+    /**
+     * Remove AnimalBornListener from list of animalBornListeners
+     * @param listener
+     */
+    void removeAnimalBornListener(AnimalBornListener listener);
 }

@@ -1,23 +1,33 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.Simulation;
-import agh.ics.oop.model.util.RandomPositionForSpawningAnimalsGenerator;
+import agh.ics.oop.model.util.AnimalStateListener;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Animal implements WorldElement
 {
 
+
+
     private MapDirections direction;
     private Vector2d position;
     private int energy;
+    private int initialStartingGenomeIndex;
     private int consumedPlants = 0;
-    private RandomPositionForSpawningAnimalsGenerator randomPositionForSpawningAnimalsGenerator;
-    private int howManyDaysIsAlive = 0;
+
+    private int daysAlive = 0;
+    private String dayOfDeath = "Not yet dead";
+
+    private boolean ifAnimalsMoveSlowerWhenOlder = false;
     private int probabilityOfNotMoving = 0;
+
+    private static int howManyAnimals = 0;
+    private final int index;
+
 
     private Set<Animal> kids = new HashSet<>();
     private Set<Animal> descendants = new HashSet<>();
@@ -26,6 +36,7 @@ public class Animal implements WorldElement
     private Genome genome;
     private int currentGenomeIndex;
 
+    private List<AnimalStateListener> animalStateListeners = new ArrayList<>();
 
     private final int minReproductionEnergy;
     private final int subtractingEnergyWhileReproducing;
@@ -33,7 +44,7 @@ public class Animal implements WorldElement
     private final int maxNumberOfmutations;
 
     // starting position of Animal
-    public Animal(Vector2d position, int genomLength, int startingEnergy, int minReproductionEnergy, int subtractingEnergyWhileReproducing, int minNumberOfmutations, int maxNumberOfmutations)
+    public Animal(Vector2d position, int genomLength, int startingEnergy, int minReproductionEnergy, int subtractingEnergyWhileReproducing, int minNumberOfmutations, int maxNumberOfmutations, boolean ifAnimalsMoveSlowerWhenOlder)
     {
         this.position = position;
         this.minReproductionEnergy = minReproductionEnergy;
@@ -45,12 +56,15 @@ public class Animal implements WorldElement
         parents = null;
         generateStartingGenomeIndex();
         direction = MapDirections.values()[ this.getGenomeAsIntList()[currentGenomeIndex] ]; // randomly generates how its turned
+        index=howManyAnimals;
+        howManyAnimals++;
+        this.ifAnimalsMoveSlowerWhenOlder = ifAnimalsMoveSlowerWhenOlder;
     }
 
     // if Animal has been created by
     public Animal(Vector2d position, Animal[] parents)
     {
-        this.position = parents[0].getPosition(); // generates a position determined by its parents
+        this.position = position;
         this.energy = parents[0].getSubtractingEnergyWhileReproducing() * 2;
         this.minReproductionEnergy = parents[0].getMinReproductionEnergy();
         this.subtractingEnergyWhileReproducing = parents[0].getSubtractingEnergyWhileReproducing();
@@ -60,11 +74,16 @@ public class Animal implements WorldElement
         this.genome = new Genome(parents[0].getGenomeAsIntList(),parents[0].getEnergy(),parents[1].getGenomeAsIntList(),parents[1].getEnergy(),minNumberOfmutations, maxNumberOfmutations);
         generateStartingGenomeIndex();
         direction = MapDirections.values()[ this.getGenomeAsIntList()[currentGenomeIndex] ];
+        index=howManyAnimals;
+        howManyAnimals++;
+        this.ifAnimalsMoveSlowerWhenOlder = parents[0].getIfAnimalsMoveSlowerWhenOlder();
     }
 
     public String toString(){
         return direction.toString();
     }
+
+
 
     public boolean isAt(Vector2d position){
         return this.position.equals(position);
@@ -74,35 +93,46 @@ public class Animal implements WorldElement
     public void move(MoveValidator moveValidator)
     {
         // corrected position based on map coordinates
-        this.direction = direction.nextByN(this.getGenomeAsIntList()[ this.currentGenomeIndex ]); // obrot zwierzaka w danym kierunku
-        Vector2d possibleMove = this.position.add(this.direction.toUnitVector()); // pozycja do ktorej chce sie poruszyc
+        if (!ifAnimalsMoveSlowerWhenOlder || Math.min(daysAlive / 100, 0.8) < Math.random()) {
+                this.direction = direction.nextByN(this.getGenomeAsIntList()[this.currentGenomeIndex]); // obrot zwierzaka w danym kierunku
+                Vector2d possibleMove = this.position.add(this.direction.toUnitVector()); // pozycja do ktorej chce sie poruszyc
 
-        if (!moveValidator.canMoveTo(possibleMove))
-        {
-                Boundary boundary = moveValidator.getCurrentBounds();
-                if (possibleMove.getX() < boundary.lowerLeftCorner().getX()) // lewo
-                {
-                    possibleMove = new Vector2d(boundary.upperRightCorner().getX(), possibleMove.getY());
+                if (!moveValidator.canMoveTo(possibleMove)) {
+                    Boundary boundary = moveValidator.getCurrentBounds();
+                    if (possibleMove.getX() < boundary.lowerLeftCorner().getX()) // lewo
+                    {
+                        possibleMove = new Vector2d(boundary.upperRightCorner().getX(), possibleMove.getY());
+                    }
+                    else if (possibleMove.getX() > boundary.upperRightCorner().getX()) // prawo
+                    {
+                        possibleMove = new Vector2d(boundary.lowerLeftCorner().getX(), possibleMove.getY());
+                    }
+
+                    if (possibleMove.getY() > boundary.upperRightCorner().getY()
+                    ) /// gora lub dol
+                    {
+                        possibleMove = new Vector2d(possibleMove.getX(), boundary.upperRightCorner().getY());
+                        this.direction = direction.nextByN(4); // obrot o 180 stopni
+                    }
+                    else if (possibleMove.getY() < boundary.lowerLeftCorner().getY())
+                    {
+                        possibleMove = new Vector2d(possibleMove.getX(), boundary.lowerLeftCorner().getY());
+                        this.direction = direction.nextByN(4);
+                    }
+
                 }
-                if (possibleMove.getY() > boundary.upperRightCorner().getY() ||
-                    possibleMove.getY() < boundary.lowerLeftCorner().getY()
-                ) /// gora lub dol
-                {
-                    possibleMove = this.position;
-                    this.direction = direction.nextByN(4); // obrot o 180 stopni
-                }
-                if (possibleMove.getX() > boundary.upperRightCorner().getX())
-                {
-                    possibleMove = new Vector2d(boundary.lowerLeftCorner().getX(), possibleMove.getY());
-                }
+            this.position = possibleMove;
         }
-        this.position = possibleMove;
+        --energy;
+        increaseGenomeIndex();
+        notifyAllObservers();
     }
 
 
     private void generateStartingGenomeIndex()
     {
-        this.currentGenomeIndex = (int)Math.round(Math.random() * (genome.getGenome().length - 1) );
+        this.currentGenomeIndex = Math.min(Math.max(0,(int)Math.round(Math.random() * (genome.getGenome().length - 1))),genome.getGenome().length);
+        initialStartingGenomeIndex = currentGenomeIndex;
     }
 
     private void increaseGenomeIndex()
@@ -118,15 +148,24 @@ public class Animal implements WorldElement
     private void addKid(Animal kid)
     {
         kids.add(kid);
+        notifyAllObservers();
     }
 
-    private void addDescendantsToAllParents(Animal descendant)
-    {
-        this.descendants.add(descendant);
-        for (Animal parent : parents)
-        {
-            parent.addDescendantsToAllParents(descendant);
+    private void addDescendantsToAllParents(Animal descendant, Set<Animal> processed) {
+        if (processed.add(this)) {
+
+            this.descendants.add(descendant);
+
+            if (parents != null) {
+                for (Animal parent : parents) {
+                    parent.addDescendantsToAllParents(descendant, processed);
+                }
+            }
         }
+    }
+
+    public void addDescendantsToAllParents(Animal descendant) {
+        addDescendantsToAllParents(descendant, new HashSet<>());
     }
 
     public Animal reproduce(Animal parent1)
@@ -142,32 +181,63 @@ public class Animal implements WorldElement
         this.addDescendantsToAllParents(kid);
         parent1.addDescendantsToAllParents(kid);
 
+        notifyAllObservers();
+
         return kid;
+    }
+
+    public void increaseDaysAlive()
+    {
+        ++daysAlive;
+        notifyAllObservers();
     }
 
     public void eatPlant(Plant plant)
     {
         this.energy += plant.getEnergy();
         this.consumedPlants += 1;
+        notifyAllObservers();
     }
 
-    public boolean isAlive()
+    public boolean isAlive(Simulation simulation)
     {
-        return this.energy > 0;
+        boolean alive = this.energy > 0;
+        if(!alive){
+            dayOfDeath = String.valueOf(simulation.getSimulationDays());
+            notifyAllObservers();
+        }
+        return alive;
+    }
+
+    public synchronized void addStateObserver(AnimalStateListener observer){
+        animalStateListeners.add(observer);
+    }
+
+    public synchronized void removeStateObserver(AnimalStateListener observer){
+        animalStateListeners.remove(observer);
+    }
+
+    private void notifyAllObservers(){
+        if (!animalStateListeners.isEmpty()){
+            for(AnimalStateListener observer : animalStateListeners){
+                observer.animalStateChanged(this);
+            }
+        }
     }
 
     public int getEnergy() { return energy; }
     public MapDirections getDirection() {
         return direction;
     }
+    @Override
     public Vector2d getPosition() {
         return position;
     }
     public int[] getGenomeAsIntList() { return genome.getGenome(); }
     public int getKidsNumber() { return kids.size(); }
     public int getDescendantsNumber() { return descendants.size(); }
-    public int getHowManyDaysIsAlive() { return howManyDaysIsAlive; }
-
+    public int getDaysAlive() { return daysAlive; }
+    public Genome getGenome() {return genome;}
     public int getSubtractingEnergyWhileReproducing() {
         return subtractingEnergyWhileReproducing;
     }
@@ -180,4 +250,12 @@ public class Animal implements WorldElement
     public int getMinReproductionEnergy() {
         return minReproductionEnergy;
     }
+    public int getInitialStartingGenomeIndex() {return initialStartingGenomeIndex;}
+    public int getIndex() {
+        return index;
+    }
+    public int getCurrentGenomeIndex(){return currentGenomeIndex;}
+    public int getConsumedPlants(){return consumedPlants;}
+    public boolean getIfAnimalsMoveSlowerWhenOlder(){return ifAnimalsMoveSlowerWhenOlder;}
+    public String getDayOfDeath(){return dayOfDeath;}
 }
