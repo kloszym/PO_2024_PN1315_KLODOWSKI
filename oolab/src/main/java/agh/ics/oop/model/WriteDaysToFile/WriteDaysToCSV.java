@@ -7,7 +7,6 @@ import agh.ics.oop.model.util.DailyDataCollector;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class WriteDaysToCSV {
     DailyDataCollector dailyDataCollector;
@@ -27,13 +26,12 @@ public class WriteDaysToCSV {
                         String.valueOf(numberOfAnimals), String.valueOf(numberOfPlants),
 
                         mostPopularGenotype.stream()
-                        .map(String::valueOf)
-                        .collect(Collectors.joining(" ")),
+                                            .map(String::valueOf)
+                                            .collect(Collectors.joining(" ")),
 
                         String.valueOf(averageEnergyLevel),
-                        averageDaysAlive
-                        .map(String::valueOf)
-                        .orElse("No data available"),
+                        averageDaysAlive.map(String::valueOf)
+                                        .orElse("No data available"),
                         String.valueOf(averageKidsNumber)
 
                 });
@@ -53,8 +51,7 @@ public class WriteDaysToCSV {
     }
 
     private String convertToCSV(List<String> data) {
-        return data.stream()
-                .collect(Collectors.joining(";"));
+        return String.join(";", data);
     }
 
     public void givenDataArray_whenConvertToCSV_thenOutputCreated() throws IOException {
@@ -78,7 +75,7 @@ public class WriteDaysToCSV {
             
             pw.println(csvLine);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
 
     }

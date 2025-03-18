@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 public class SimulationEngine {
 
-    private Map<UUID, Simulation> simulations;
+    private final Map<UUID, Simulation> simulations;
     private Map<UUID, Thread> simulationsThreads;
     private ExecutorService executorService;
 

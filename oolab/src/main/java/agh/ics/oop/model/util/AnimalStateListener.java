@@ -4,6 +4,6 @@ import agh.ics.oop.model.Animal;
 
 public interface AnimalStateListener {
 
-    public void animalStateChanged(Animal animal);
+    void animalStateChanged(Animal animal);
 
 }

@@ -11,14 +11,13 @@ public class RandomPositionForPlantsGenerator{
     private final Vector2d lowerLeftMapCorner = new Vector2d(0,0);
     private final Vector2d upperRightEquatorCorner;
     private final Vector2d lowerLeftEquatorCorner;
-    private final List<Vector2d> positionsLessDesirable = new ArrayList<Vector2d>();
+    private final List<Vector2d> positionsLessDesirable = new ArrayList<>();
     private int lessDesirableGenerationRange;
-    private final List<Vector2d> positionsMoreDesirable = new ArrayList<Vector2d>();
+    private final List<Vector2d> positionsMoreDesirable = new ArrayList<>();
     private int moreDesirableGenerationRange;
-    private Random rand = new Random();
+    private final Random rand = new Random();
     private final boolean ifPlantsPreferDeadBodies;
-    private int deadAnimalGenerationRange;
-    private final List<Vector2d> positionsWithDeadAnimals = new ArrayList<Vector2d>();
+    private final List<Vector2d> positionsWithDeadAnimals = new ArrayList<>();
 
     public RandomPositionForPlantsGenerator(int height, int width, Vector2d upperRightEquatorCorner, Vector2d lowerLeftEquatorCorner, boolean ifPlantsPreferDeadBodies) {
         upperRightMapCorner = new Vector2d(height-1, width-1);
@@ -111,14 +110,13 @@ public class RandomPositionForPlantsGenerator{
     }
 
     private Vector2d chooseFromDeadAnimalList(){
-        if (deadAnimalGenerationRange == 0){
+        if (positionsWithDeadAnimals.isEmpty()){
             return null;
         }
-        int indexOfArray = rand.nextInt(deadAnimalGenerationRange);
+        int indexOfArray = rand.nextInt(positionsWithDeadAnimals.size());
         Vector2d position = positionsWithDeadAnimals.get(indexOfArray);
-        deadAnimalGenerationRange--;
-        Collections.swap(positionsWithDeadAnimals, indexOfArray, deadAnimalGenerationRange);
-        positionsWithDeadAnimals.remove(deadAnimalGenerationRange);
+        Collections.swap(positionsWithDeadAnimals, indexOfArray, positionsWithDeadAnimals.size()-1);
+        positionsWithDeadAnimals.remove(positionsWithDeadAnimals.size());
         return position;
     }
 
@@ -150,7 +148,6 @@ public class RandomPositionForPlantsGenerator{
         for (Vector2d pos: positionsToAdd){
             if (pos.follows(lowerLeftMapCorner) && pos.precedes(upperRightMapCorner)){
                 positionsWithDeadAnimals.add(pos);
-                deadAnimalGenerationRange++;
             }
         }
     }

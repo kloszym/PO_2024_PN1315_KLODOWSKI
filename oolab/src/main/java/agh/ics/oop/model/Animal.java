@@ -23,20 +23,19 @@ public class Animal implements WorldElement
     private String dayOfDeath = "Not yet dead";
 
     private boolean ifAnimalsMoveSlowerWhenOlder = false;
-    private int probabilityOfNotMoving = 0;
 
     private static int howManyAnimals = 0;
     private final int index;
 
 
-    private Set<Animal> kids = new HashSet<>();
-    private Set<Animal> descendants = new HashSet<>();
+    private final Set<Animal> kids = new HashSet<>();
+    private final Set<Animal> descendants = new HashSet<>();
 
     private final Animal[] parents; // zależy czy jest pierwszy czy ma jakichś rodziców
-    private Genome genome;
+    private final Genome genome;
     private int currentGenomeIndex;
 
-    private List<AnimalStateListener> animalStateListeners = new ArrayList<>();
+    private final List<AnimalStateListener> animalStateListeners = new ArrayList<>();
 
     private final int minReproductionEnergy;
     private final int subtractingEnergyWhileReproducing;
@@ -83,17 +82,10 @@ public class Animal implements WorldElement
         return direction.toString();
     }
 
-
-
-    public boolean isAt(Vector2d position){
-        return this.position.equals(position);
-    }
-
-
     public void move(MoveValidator moveValidator)
     {
         // corrected position based on map coordinates
-        if (!ifAnimalsMoveSlowerWhenOlder || Math.min(daysAlive / 100, 0.8) < Math.random()) {
+        if (!ifAnimalsMoveSlowerWhenOlder || Math.min(daysAlive / 100.0, 0.8) < Math.random()) {
                 this.direction = direction.nextByN(this.getGenomeAsIntList()[this.currentGenomeIndex]); // obrot zwierzaka w danym kierunku
                 Vector2d possibleMove = this.position.add(this.direction.toUnitVector()); // pozycja do ktorej chce sie poruszyc
 
